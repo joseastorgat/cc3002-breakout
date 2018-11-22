@@ -1,5 +1,7 @@
 package logic.brick;
 
+import logic.visitor.Visitor;
+
 /**
  * Interface that represents a brick object.
  * <p>
@@ -34,4 +36,6 @@ public interface Brick {
      * @return the remaining hits to destroy de brick
      */
     int remainingHits();
+
+    void accept(Visitor visitor);
 }

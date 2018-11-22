@@ -1,5 +1,7 @@
 package logic.brick;
 
+import logic.visitor.Visitor;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -36,5 +38,8 @@ public abstract class AbstractBrick extends Observable implements Brick {
     public void subscribe(Observer observer){
         addObserver(observer);
     }
+
+    @Override
+    public abstract accept(Visitor visitor);
 }
 
