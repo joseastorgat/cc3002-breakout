@@ -9,7 +9,7 @@ public abstract class AbstractBrick extends Observable implements Brick {
     private int score;
     private int hits;
 
-    public AbstractBrick (int hits, int score){
+    public AbstractBrick(int hits, int score){
         this.score = score;
         this.hits = hits;
     }
@@ -40,6 +40,6 @@ public abstract class AbstractBrick extends Observable implements Brick {
     }
 
     @Override
-    public abstract accept(Visitor visitor);
+    public abstract void accept(Visitor visitor);
 }
 

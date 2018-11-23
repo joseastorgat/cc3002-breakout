@@ -4,8 +4,8 @@ import logic.visitor.Visitor;
 
 public class MetalBrick extends AbstractBrick {
 
-	public GlassBrick(){
-		super(3, 200);
+	public MetalBrick(){
+		super(10, 0);
 	}
 
 	@Override
@@ -13,4 +13,4 @@ public class MetalBrick extends AbstractBrick {
 		v.visitMetalBrick(this);
 	}
 }
-}
+

@@ -2,6 +2,8 @@ package logic.brick;
 
 import logic.visitor.Visitor;
 
+import java.util.Observer;
+
 /**
  * Interface that represents a brick object.
  * <p>
@@ -38,4 +40,14 @@ public interface Brick {
     int remainingHits();
 
     void accept(Visitor visitor);
+
+    /**
+     * Add an Observer
+     *
+     * @see Observer
+     * @param o Observer
+     */
+    void addObserver(Observer o);
+
+
 }

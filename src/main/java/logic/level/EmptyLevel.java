@@ -2,13 +2,15 @@ package logic.level;
 import logic.brick.Brick;
 import logic.visitor.Visitor;
 
+import java.util.Collections;
 import java.util.List;
 
-public class EmptyLevel extends AbstractLevel {
-
-    public EmptyLevel(){
-        super(name);
+public class EmptyLevel implements Level {
+    @Override
+    public String getName(){
+        return "";
     }
+
     @Override
     public int getNumberOfBricks() {
         return 0;
@@ -16,13 +18,31 @@ public class EmptyLevel extends AbstractLevel {
 
     @Override
     public List<Brick> getBricks() {
-        return null;
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Level getNextLevel(){
+        return this;
     }
 
     @Override
     public boolean isPlayableLevel() {
         return false;
     }
+
+    @Override
+    public boolean hasNextLevel(){
+        return false;
+    }
+
+    @Override
+    public Level addPlayingLevel(Level level){
+        return level;
+    }
+
+    @Override
+    public void setNextLevel(Level level){}
 
     @Override
     public int getPoints() {
@@ -33,5 +53,9 @@ public class EmptyLevel extends AbstractLevel {
     public void accept(Visitor visitor){
         visitor.visitEmptyLevel(this);
     }
+
+
+
+
 }
 
