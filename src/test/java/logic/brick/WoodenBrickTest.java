@@ -8,7 +8,7 @@ public class WoodenBrickTest extends GlassBrickTest {
 
     @Before
     public void setUp() {
-        brick  = new WoodenBrick()WoodenBrickTest;
+        brick  = new WoodenBrick();
         score = 200;
         hits   = 3;
 
