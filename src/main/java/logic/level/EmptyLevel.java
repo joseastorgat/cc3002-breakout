@@ -1,9 +1,10 @@
 package logic.level;
 import logic.brick.Brick;
-import logic.visitor.Visitor;
+import visitor.Visitor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Observer;
 
 public class EmptyLevel implements Level {
     @Override
@@ -54,8 +55,9 @@ public class EmptyLevel implements Level {
         visitor.visitEmptyLevel(this);
     }
 
-
-
+    @Override
+    public void subscribe(Observer observer){
+    }
 
 }
 

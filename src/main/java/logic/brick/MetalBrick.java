@@ -1,9 +1,16 @@
 package logic.brick;
 
-import logic.visitor.Visitor;
+import visitor.Visitor;
 
+/**
+ * MetalBrick class is an {@link Brick}
+ * <br>
+ * 10 hit destroys it. Score 0 Points.
+ */
 public class MetalBrick extends AbstractBrick {
-
+	/**
+	 * Metal Brick constructor
+	 */
 	public MetalBrick(){
 		super(10, 0);
 	}

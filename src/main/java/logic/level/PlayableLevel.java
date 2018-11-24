@@ -1,20 +1,32 @@
 package logic.level;
-
 import logic.brick.Brick;
 import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
 import logic.brick.WoodenBrick;
-import logic.visitor.Visitor;
+import visitor.UpdateGameVisitor;
+import visitor.Visitor;
 
 import java.util.*;
 
-public class PlayableLevel implements Observer, Level {
+/**
+ * Playable level is an implementation of Level
+ *
+ **/
+public class PlayableLevel extends Observable implements Observer, Level  {
     private List<Brick> bricksList;
     private Level nextLevel;
     private String name;
 
+    /**
+     * Playable Level constructor. This construct a Level with glass, wooden and metal Bricks
+     *
+     * @param name Name of the Level
+     * @param numberOfBricks Number of Glass + Wooden Bricks in the level
+     * @param probOfGlass Probability of that a brick is a Glass Brick
+     * @param probOfMetal Probability to get Metal Bricks
+     * @param seed Random seed
+     */
     public PlayableLevel(String name, int numberOfBricks, double probOfGlass, double probOfMetal, int seed){
-
         this.name = name;
         this.nextLevel = new EmptyLevel();
         this.bricksList = new ArrayList<>();
@@ -97,5 +109,17 @@ public class PlayableLevel implements Observer, Level {
 
     @Override
     public void update(Observable o, Object arg) {
+        UpdateGameVisitor ugv = new UpdateGameVisitor();
+        if(o instanceof Brick){
+            ((Brick) o).accept( ugv );
+            setChanged();
+            notifyObservers(ugv);
+        }
+
+    }
+
+    @Override
+    public void subscribe(Observer observer){
+        addObserver(observer);
     }
 }

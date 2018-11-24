@@ -1,7 +1,7 @@
 package logic.level;
 
 import logic.brick.Brick;
-import logic.visitor.Visitor;
+import visitor.Visitor;
 
 import java.util.List;
 import java.util.Observer;
@@ -75,6 +75,11 @@ public interface Level {
      */
     void setNextLevel(Level level);
 
-
+    /**
+     * Accept the visit of a {@link Visitor}
+     * @param visitor Visitor visiting
+     */
     void accept(Visitor visitor);
+
+    void subscribe(Observer observer);
 }
