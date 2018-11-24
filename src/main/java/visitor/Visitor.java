@@ -1,12 +1,13 @@
-package logic.visitor;
+package visitor;
 
+import controller.Game;
+import logic.brick.Brick;
 import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
 import logic.brick.WoodenBrick;
 import logic.level.EmptyLevel;
 import logic.level.PlayableLevel;
 
-import java.awt.dnd.DropTarget;
 
 /**
  * Class that represents a Visitor object
@@ -14,19 +15,17 @@ import java.awt.dnd.DropTarget;
  * @author José Astorga
  */
 public abstract class Visitor {
-
     /**
      * Visits the bricks of a Level
      *
-     * @param level PlayableLevel to visit
+     * @param level {@link PlayableLevel} to visit
      */
     public void visitPlayableLevel(PlayableLevel level) {}
 
-
     /**
      * Visits the bricks of a Level
      *
-     * @param level EmptyLevel to visit
+     * @param level {@link EmptyLevel} to visit
      */
     public void visitEmptyLevel(EmptyLevel level) {}
 
@@ -34,22 +33,27 @@ public abstract class Visitor {
     /**
      * Visits a GlassBrick
      *
-     * @param glassBrick GlassBrick to visit
+     * @param glassBrick {@link GlassBrick} to visit
      */
     public void visitGlassBrick(GlassBrick glassBrick) { }
 
     /**
      * Visits a WoodenBrick
      *
-     * @param woodenBrick WoodenBrick to visit
+     * @param woodenBrick {@link WoodenBrick} to visit
      */
     public void visitWoodenBrick(WoodenBrick woodenBrick) { }
 
     /**
      * Visits a MetalBrick
      *
-     * @param metalBrick MetalBrick to visit
+     * @param metalBrick {@link MetalBrick} to visit
      */
     public void visitMetalBrick(MetalBrick metalBrick) { }
 
+    /**
+     * Visit a Game
+     * @param game {@link Game} to visit
+     */
+    public void visitGame(Game game){}
 }
