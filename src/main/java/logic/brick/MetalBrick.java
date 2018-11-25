@@ -6,6 +6,8 @@ import visitor.Visitor;
  * MetalBrick class is an {@link Brick}
  * <br>
  * 10 hit destroys it. Score 0 Points.
+ *
+ * @author José Astorga
  */
 public class MetalBrick extends AbstractBrick {
 	/**

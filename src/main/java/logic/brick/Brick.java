@@ -10,6 +10,7 @@ import java.util.Observer;
  * All bricks should implement this interface.
  *
  * @author Juan-Pablo Silva
+ * @author José Astorga
  */
 public interface Brick {
     /**

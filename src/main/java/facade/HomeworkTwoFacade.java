@@ -11,6 +11,7 @@ import java.util.List;
  * Facade class to expose the logic of the game to a GUI in the upcoming homework.
  *
  * @author Juan-Pablo Silva
+ * @author José Astorga
  */
 public class HomeworkTwoFacade {
     /**

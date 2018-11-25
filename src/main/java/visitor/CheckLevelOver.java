@@ -5,9 +5,18 @@ import logic.brick.GlassBrick;
 import logic.brick.WoodenBrick;
 import logic.level.PlayableLevel;
 
-public class CheckFinishLevel extends Visitor {
+/**
+ * CheckLevelOver is a {@link Visitor} to check if a level is over
+ *
+ * @author José Astorga
+ */
+public class CheckLevelOver extends Visitor {
     private boolean result;
-    public CheckFinishLevel(){
+
+    /**
+     * CheckLevelOver Constructor
+     */
+    public CheckLevelOver(){
         result = false;
     }
 
@@ -22,6 +31,10 @@ public class CheckFinishLevel extends Visitor {
         }
     }
 
+    /**
+     * Check if a {@link Brick} is destroyed
+     * @param brick Brick to be checked
+     */
     private void checkBrick(Brick brick){
         if(!brick.isDestroyed()){
             result = false;
@@ -38,7 +51,10 @@ public class CheckFinishLevel extends Visitor {
         checkBrick(brick);
     }
 
-    public boolean checkResult(){
+    /**
+     * Gets the result, true if level visited is over, false otherwise.
+     */
+    public boolean getResult(){
         return result;
     }
 

@@ -6,6 +6,8 @@ import visitor.Visitor;
  * GlassBrick class is an Brick
  * <br>
  * 1 hit destroys it. Score 50 Points.
+ *
+ * @author José Astorga
  */
 public class GlassBrick extends AbstractBrick {
 	/**

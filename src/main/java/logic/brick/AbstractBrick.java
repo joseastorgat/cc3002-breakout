@@ -5,6 +5,8 @@ import java.util.Observable;
 
 /**
  * AbstractBrick Class implements {@link Brick}
+ *
+ * @author José Astorga
  */
 public abstract class AbstractBrick extends Observable implements Brick {
     private int score;
@@ -46,6 +48,10 @@ public abstract class AbstractBrick extends Observable implements Brick {
         return this.hits;
     }
 
+    /**
+     * Accept the visit of a {@link Visitor}
+     * @param visitor Visitor visiting brick.
+     */
     @Override
     public abstract void accept(Visitor visitor);
 

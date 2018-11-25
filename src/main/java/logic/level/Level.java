@@ -10,6 +10,7 @@ import java.util.Observer;
  * Interface that represents the basics of a level to be played on.
  *
  * @author Juan-Pablo Silva
+ * @author José Astorga
  */
 public interface Level {
     /**

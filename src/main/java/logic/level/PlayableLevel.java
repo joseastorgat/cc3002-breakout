@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * Playable level is an implementation of Level
  *
+ * @author José Astorga
  **/
 public class PlayableLevel extends Observable implements Observer, Level  {
     private List<Brick> bricksList;

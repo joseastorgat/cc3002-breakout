@@ -6,6 +6,8 @@ import visitor.Visitor;
  * WoodenBrick class is an {@link Brick}
  * <br>
  * 3 hit destroys it. Score 200 Points.
+ *
+ * @author José Astorga
  */
 public class WoodenBrick extends AbstractBrick {
 	/**

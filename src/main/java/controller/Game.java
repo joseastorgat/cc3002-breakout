@@ -2,8 +2,7 @@ package controller;
 
 import logic.level.EmptyLevel;
 import logic.level.Level;
-import logic.level.PlayableLevel;
-import visitor.CheckFinishLevel;
+import visitor.CheckLevelOver;
 import visitor.Visitor;
 
 import java.util.Observable;
@@ -20,6 +19,11 @@ public class Game implements Observer {
     private int points;
     private boolean won;
 
+    /**
+     * Game Constructor
+     *
+     * @param initBalls number of initial balls
+     */
     public Game(int initBalls) {
         level = new EmptyLevel();
         balls = initBalls;
@@ -128,16 +132,24 @@ public class Game implements Observer {
         level.addPlayingLevel(lvl);
     }
 
+    /**
+     * Update method, called when something change in observed {@link Level}
+     * <br>
+     * Update points and ball number then check if level is over.
+     *
+     * @param o Observable Object, Level observed.
+     * @param arg Args of update
+     */
     @Override
     public void update(Observable o, Object arg) {
         if( arg instanceof Visitor){
             this.accept((Visitor) arg);
         }
 
-        CheckFinishLevel cfl = new CheckFinishLevel();
+        CheckLevelOver cfl = new CheckLevelOver();
         level.accept(cfl);
 
-        if(cfl.checkResult()){
+        if(cfl.getResult()){
             if(!level.hasNextLevel()) {
                 won = true;
             }
