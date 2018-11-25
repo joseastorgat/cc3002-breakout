@@ -1,9 +1,7 @@
 package logic.brick;
 
 import visitor.Visitor;
-
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  * AbstractBrick Class implements {@link Brick}
@@ -18,7 +16,7 @@ public abstract class AbstractBrick extends Observable implements Brick {
      * @param hits Number of Hit that the brick resist
      * @param score Score delivered when destroyed
      */
-    public AbstractBrick(int hits, int score){
+    AbstractBrick(int hits, int score){
         this.score = score;
         this.hits = hits;
     }

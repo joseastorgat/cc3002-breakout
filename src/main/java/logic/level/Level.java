@@ -81,5 +81,10 @@ public interface Level {
      */
     void accept(Visitor visitor);
 
+
+    /**
+     * Deal with {@link Observer} trying to observe level
+     * @param observer Observer trying to observe
+     */
     void subscribe(Observer observer);
 }

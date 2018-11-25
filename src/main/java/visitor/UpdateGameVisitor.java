@@ -20,7 +20,7 @@ public class UpdateGameVisitor extends Visitor {
             game.updatePoints(points);
         }
         if(upgradeBalls){
-            game.upgradeBall();
+            game.addBall();
         }
     }
 

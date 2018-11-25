@@ -54,10 +54,11 @@ public class EmptyLevel implements Level {
     public void accept(Visitor visitor){
         visitor.visitEmptyLevel(this);
     }
-
     @Override
     public void subscribe(Observer observer){
     }
+
+
 
 }
 

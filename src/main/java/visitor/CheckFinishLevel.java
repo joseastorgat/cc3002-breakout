@@ -7,7 +7,6 @@ import logic.level.PlayableLevel;
 
 public class CheckFinishLevel extends Visitor {
     private boolean result;
-
     public CheckFinishLevel(){
         result = false;
     }
@@ -32,7 +31,6 @@ public class CheckFinishLevel extends Visitor {
     @Override
     public void visitWoodenBrick(WoodenBrick brick){
         checkBrick(brick);
-
     }
 
     @Override
