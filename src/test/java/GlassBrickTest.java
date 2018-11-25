@@ -1,5 +1,5 @@
-package logic.brick;
-
+import logic.brick.Brick;
+import logic.brick.GlassBrick;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +38,9 @@ public class GlassBrickTest {
             brick.hit();
         }
         assertTrue(brick.isDestroyed());
+        brick.hit();
+        brick.hit();
+        assertEquals(brick.remainingHits(), 0);
 
     }
 

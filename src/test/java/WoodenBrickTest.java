@@ -1,8 +1,5 @@
-package logic.brick;
-
+import logic.brick.WoodenBrick;
 import org.junit.Before;
-
-import static org.junit.Assert.*;
 
 public class WoodenBrickTest extends GlassBrickTest {
 
