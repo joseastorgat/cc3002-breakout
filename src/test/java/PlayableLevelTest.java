@@ -1,6 +1,12 @@
+import logic.brick.Brick;
+import logic.brick.GlassBrick;
+import logic.brick.MetalBrick;
+import logic.brick.WoodenBrick;
 import logic.level.PlayableLevel;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -26,12 +32,23 @@ public class PlayableLevelTest{
     public void BricksTest() {
         assertEquals(level.getNumberOfBricks(),16);
         assertEquals(level.getBricks().size(),16);
+        assertEquals(level.getBricks().stream().filter(brick -> brick instanceof MetalBrick).collect(Collectors.toList()).size(), 6);
+        assertEquals(level.getBricks().stream().filter(brick -> brick instanceof GlassBrick).collect(Collectors.toList()).size(), 3);
+        assertEquals(level.getBricks().stream().filter(brick -> brick instanceof WoodenBrick).collect(Collectors.toList()).size(), 7);
 
         assertEquals(secondLevel.getNumberOfBricks(),16);
         assertEquals(secondLevel.getBricks().size(),16);
+        assertEquals(secondLevel.getBricks().stream().filter(brick -> brick instanceof MetalBrick).collect(Collectors.toList()).size(), 6);
+        assertEquals(secondLevel.getBricks().stream().filter(brick -> brick instanceof GlassBrick).collect(Collectors.toList()).size(), 7);
+        assertEquals(secondLevel.getBricks().stream().filter(brick -> brick instanceof WoodenBrick).collect(Collectors.toList()).size(), 3);
+
 
         assertEquals(thirdLevel.getNumberOfBricks(),10);
         assertEquals(thirdLevel.getBricks().size(),10);
+        assertEquals(thirdLevel.getBricks().stream().filter(brick -> brick instanceof MetalBrick).collect(Collectors.toList()).size(),0 );
+        assertEquals(thirdLevel.getBricks().stream().filter(brick -> brick instanceof GlassBrick).collect(Collectors.toList()).size(), 3);
+        assertEquals(thirdLevel.getBricks().stream().filter(brick -> brick instanceof WoodenBrick).collect(Collectors.toList()).size(), 7);
+
     }
 
     @Test

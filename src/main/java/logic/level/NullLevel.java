@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Observer;
 
 /**
- *  EmptyLevel is an Null implementation of Level
+ *  NullLevel is an Null implementation of Level
  * @author José Astorga
  */
-public class EmptyLevel implements Level {
+public class NullLevel implements Level {
     @Override
     public String getName(){
         return "";

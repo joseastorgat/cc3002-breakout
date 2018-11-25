@@ -29,7 +29,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
      */
     public PlayableLevel(String name, int numberOfBricks, double probOfGlass, double probOfMetal, int seed){
         this.name = name;
-        this.nextLevel = new EmptyLevel();
+        this.nextLevel = new NullLevel();
         this.bricksList = new ArrayList<>();
         Random r = new Random(seed);
 
@@ -56,7 +56,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
     @Override
     public String getName(){
         return this.name;
-    };
+    }
 
     @Override
     public int getNumberOfBricks() {
@@ -81,7 +81,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
     @Override
     public boolean hasNextLevel(){
         return this.nextLevel.isPlayableLevel();
-    };
+    }
 
     @Override
     public Level addPlayingLevel(Level level){

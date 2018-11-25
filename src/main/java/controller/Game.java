@@ -1,6 +1,6 @@
 package controller;
 
-import logic.level.EmptyLevel;
+import logic.level.NullLevel;
 import logic.level.Level;
 import visitor.CheckLevelOver;
 import visitor.Visitor;
@@ -25,7 +25,7 @@ public class Game implements Observer {
      * @param initBalls number of initial balls
      */
     public Game(int initBalls) {
-        level = new EmptyLevel();
+        level = new NullLevel();
         balls = initBalls;
         points = 0;
         won = false;

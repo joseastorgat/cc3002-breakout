@@ -1,4 +1,4 @@
-import logic.level.EmptyLevel;
+import logic.level.NullLevel;
 import logic.level.Level;
 import logic.level.PlayableLevel;
 import org.junit.Before;
@@ -6,12 +6,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class EmptyLevelTest {
-    private EmptyLevel level;
+public class NullLevelTest {
+    private NullLevel level;
 
     @Before
     public void setUp(){
-        level = new EmptyLevel();
+        level = new NullLevel();
     }
     @Test
     public void getNameTest() {

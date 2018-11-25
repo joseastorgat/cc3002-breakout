@@ -4,7 +4,7 @@ import controller.Game;
 import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
 import logic.brick.WoodenBrick;
-import logic.level.EmptyLevel;
+import logic.level.NullLevel;
 import logic.level.PlayableLevel;
 
 
@@ -24,9 +24,9 @@ public abstract class Visitor {
     /**
      * Visits the bricks of a Level
      *
-     * @param level {@link EmptyLevel} to visit
+     * @param level {@link NullLevel} to visit
      */
-    public void visitEmptyLevel(EmptyLevel level) {}
+    public void visitEmptyLevel(NullLevel level) {}
 
 
     /**
