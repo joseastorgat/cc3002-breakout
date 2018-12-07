@@ -44,5 +44,12 @@ public class GlassBrickTest {
 
     }
 
+    @Test
+    public void isBrickTest(){
+        assertFalse(brick.isWoodenBrick());
+        assertTrue(brick.isGlassBrick());
+        assertFalse(brick.isMetalBrick());
+    }
+
 
 }
