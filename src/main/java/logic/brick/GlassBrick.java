@@ -21,4 +21,10 @@ public class GlassBrick extends AbstractBrick {
 	public void accept(Visitor v){
 		v.visitGlassBrick(this);
 	}
+
+
+	@Override
+	public boolean isGlassBrick(){
+		return true;
+	}
 }

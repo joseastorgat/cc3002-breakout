@@ -21,5 +21,11 @@ public class MetalBrick extends AbstractBrick {
 	public void accept(Visitor v){
 		v.visitMetalBrick(this);
 	}
+
+
+	@Override
+	public boolean isMetalBrick(){
+		return true;
+	}
 }
 

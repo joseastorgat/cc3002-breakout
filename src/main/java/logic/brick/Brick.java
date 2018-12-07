@@ -50,5 +50,28 @@ public interface Brick {
      */
     void addObserver(Observer o);
 
+    /**
+     * Method to check if a brick is a wooden brick
+     *
+     * @return true if the brick is a {@link WoodenBrick}, false otherwise
+     */
+    boolean isWoodenBrick();
+
+    /**
+     * Method to check if a brick is a glass brick
+     *
+     * @return true if the brick is a {@link GlassBrick}, false otherwise
+     */
+
+    boolean isGlassBrick();
+
+
+    /**
+     * Method to check if a brick is a metal brick
+     *
+     * @return true if the brick is a {@link MetalBrick}, false otherwise
+     */
+    boolean isMetalBrick();
+
 
 }

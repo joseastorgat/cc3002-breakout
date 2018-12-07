@@ -55,6 +55,20 @@ public abstract class AbstractBrick extends Observable implements Brick {
     @Override
     public abstract void accept(Visitor visitor);
 
+    @Override
+    public boolean isWoodenBrick(){
+        return false;
+    }
+
+    @Override
+    public boolean isGlassBrick(){
+        return false;
+    }
+
+    @Override
+    public boolean isMetalBrick(){
+        return false;
+    }
 
 }
 

@@ -21,4 +21,9 @@ public class WoodenBrick extends AbstractBrick {
 	public void accept(Visitor v){
 		v.visitWoodenBrick(this);
 	}
+
+	@Override
+	public boolean isWoodenBrick(){
+		return true;
+	}
 }
