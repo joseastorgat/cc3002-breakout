@@ -16,12 +16,16 @@ import javafx.scene.text.Text;
 import java.util.Map;
 
 import static gui.BreakoutFactory.*;
+import facade.HomeworkTwoFacade;
 
 public class GUI extends GameApplication {
 
     private HomeworkTwoFacade game;
+    private Entity player;
 
-    protected void initSettings(GameSettings gameSettings){
+
+
+    protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(800);
         gameSettings.setHeight(800);
         gameSettings.setTitle("Breakout Game");
@@ -30,24 +34,56 @@ public class GUI extends GameApplication {
 
     @Override
     protected void initGame() {
-        Entity player = newPlayer(350, 700);
-        Entity ball = newBall(350, 400);
-        Entity infobar = newInfoBar();
-        getGameWorld().addEntities(newBackground(), player, ball, newWalls(), infobar);    }
+        player = newPlayer(350, 700);
+        Entity ball = newBall(390, 680);
+        getGameWorld().addEntities(newBackground(), player, ball, newWalls(), newInfoBar());
+
+        game = new HomeworkTwoFacade();
+
+
+    }
+
 
     @Override
     protected void initInput() {
+        Input input = getInput();
+
+        input.addAction(new UserAction("Move Left") {
+            @Override
+            protected void onAction() {
+                player.getComponent(PlayerControl.class).moveLeft();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                player.getComponent(PlayerControl.class).stop();
+            }
+        }, KeyCode.A);
+
+        input.addAction(new UserAction("Move Right") {
+            @Override
+            protected void onAction() {
+                player.getComponent(PlayerControl.class).moveRight();
+            }
+
+            @Override
+            protected void onActionEnd() {
+                player.getComponent(PlayerControl.class).stop();
+            }
+        }, KeyCode.D);
     }
 
     @Override
     protected void initPhysics() {
         getPhysicsWorld().setGravity(0,0);
         getPhysicsWorld().addCollisionHandler(
-                new CollisionHandler(BreakoutGameType.PLAYER, BreakoutGameType.WALL) {
+                new CollisionHandler(BreakoutGameType.BALL, BreakoutGameType.WALL) {
                     @Override
-                    protected void onHitBoxTrigger(Entity player, Entity wall,
-                                                   HitBox boxPlayer, HitBox boxWall) {
-                        System.out.println(boxWall.getName());
+                    protected void onHitBoxTrigger(Entity ball, Entity wall,
+                                                   HitBox boxBall, HitBox boxWall) {
+                        if (boxWall.getName().equals("BOT")) {
+                            ball.removeFromWorld();
+                        }
                     }
                 });
     }
