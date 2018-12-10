@@ -1,5 +1,6 @@
 package logic.brick;
 
+import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 import java.util.Observable;
 
@@ -29,7 +30,7 @@ public abstract class AbstractBrick extends Observable implements Brick {
             this.hits-=1;
             if (this.isDestroyed()){
                 this.setChanged();
-                this.notifyObservers();
+                this.notifyUp();
             }
         }
     }
@@ -70,5 +71,12 @@ public abstract class AbstractBrick extends Observable implements Brick {
         return false;
     }
 
-}
+    /**
+     * Method that create a visitor and deliver it to observers
+     */
+    public void notifyUp()
+    {
+        Visitor visitor =new UpdateGamePointsVisitor(this.getScore());
+        notifyObservers(visitor);
+    }}
 

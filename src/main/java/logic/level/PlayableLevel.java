@@ -3,7 +3,8 @@ import logic.brick.Brick;
 import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
 import logic.brick.WoodenBrick;
-import visitor.UpdateGameVisitor;
+import visitor.ChangeLevelVisitor;
+import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 
 import java.util.*;
@@ -17,7 +18,8 @@ public class PlayableLevel extends Observable implements Observer, Level  {
     private List<Brick> bricksList;
     private Level nextLevel;
     private String name;
-
+    private int currentPoints;
+    private int totalPoints;
     /**
      * Playable Level constructor. This construct a Level with glass, wooden and metal Bricks
      *
@@ -31,23 +33,31 @@ public class PlayableLevel extends Observable implements Observer, Level  {
         this.name = name;
         this.nextLevel = new NullLevel();
         this.bricksList = new ArrayList<>();
+        this.currentPoints = 0;
+        this.totalPoints = 0;
+
         Random r = new Random(seed);
 
         for(int i =0; i<numberOfBricks; i++){
             double p = r.nextDouble();
+            Brick brick;
             if(p<probOfGlass) {
-                bricksList.add(new GlassBrick());
+                brick = new GlassBrick();
             }
             else{
-                bricksList.add(new WoodenBrick());
+                brick = new WoodenBrick();
             }
+            totalPoints+= brick.getScore();
+            bricksList.add(brick);
         }
+
         for( int i = 0; i<numberOfBricks; i++){
             double p = r.nextDouble();
             if(p<probOfMetal) {
                 bricksList.add(new MetalBrick());
             }
         }
+
         for( Brick brick : bricksList){
             brick.addObserver(this);
         }
@@ -60,7 +70,15 @@ public class PlayableLevel extends Observable implements Observer, Level  {
 
     @Override
     public int getNumberOfBricks() {
-        return bricksList.size();
+        int alivebricks = 0;
+
+        for(Brick brick : this.getBricks() ){
+            if(!brick.isDestroyed()){
+                alivebricks+=1;
+            }
+        }
+        return alivebricks;
+
     }
 
     @Override
@@ -96,11 +114,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
 
     @Override
     public int getPoints() {
-        int pt = 0;
-        for(Brick brick: bricksList){
-            pt+=brick.getScore();
-        }
-        return pt;
+        return totalPoints;
     }
 
     @Override
@@ -110,17 +124,38 @@ public class PlayableLevel extends Observable implements Observer, Level  {
 
     @Override
     public void update(Observable o, Object arg) {
-        UpdateGameVisitor ugv = new UpdateGameVisitor();
-        if(o instanceof Brick){
-            ((Brick) o).accept( ugv );
+        if(arg instanceof Visitor){
+            this.accept((Visitor) arg);
             setChanged();
-            notifyObservers(ugv);
+            notifyObservers( arg );
         }
 
+        if(this.getCurrentPoints()==this.getPoints()){
+            setChanged();
+            notifyObservers(new ChangeLevelVisitor());
+        }
     }
 
     @Override
     public void subscribe(Observer observer){
         addObserver(observer);
+    }
+
+    /**
+     * Method to add points to a Lvl
+     *
+     * @param points points to be added
+     */
+    public void addPoints(int points) {
+        currentPoints+=points;
+    }
+
+    /**
+     * Method to get current points of the level
+     *
+     * @return currentPoints obtained in the level
+     */
+    public int getCurrentPoints() {
+        return currentPoints;
     }
 }

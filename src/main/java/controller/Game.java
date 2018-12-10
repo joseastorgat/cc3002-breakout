@@ -2,7 +2,7 @@ package controller;
 
 import logic.level.NullLevel;
 import logic.level.Level;
-import visitor.CheckLevelOver;
+import visitor.ChangeLevelVisitor;
 import visitor.Visitor;
 
 import java.util.Observable;
@@ -119,6 +119,9 @@ public class Game implements Observer {
      * Pass to the next level of the current {@link Level}. Ignores all conditions and skip to the next level.
      **/
     public void goNextLevel() {
+        if(!level.hasNextLevel()) {
+            won = true;
+        }
 
         setCurrentLevel(level.getNextLevel());
 
@@ -142,22 +145,11 @@ public class Game implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if( arg instanceof Visitor){
+        if (arg instanceof Visitor) {
             this.accept((Visitor) arg);
-        }
-
-        CheckLevelOver cfl = new CheckLevelOver();
-        level.accept(cfl);
-
-        if(cfl.getResult()){
-            if(!level.hasNextLevel()) {
-                won = true;
-            }
-            goNextLevel();
 
         }
     }
-
     /**
      * Accept a visit from a {@link Visitor}
      *

@@ -1,5 +1,6 @@
 package logic.brick;
 
+import visitor.UpgradeGameBallsVisitor;
 import visitor.Visitor;
 
 /**
@@ -26,6 +27,11 @@ public class MetalBrick extends AbstractBrick {
 	@Override
 	public boolean isMetalBrick(){
 		return true;
+	}
+
+	@Override
+	public void notifyUp(){
+        notifyObservers(new UpgradeGameBallsVisitor());
 	}
 }
 

@@ -1,5 +1,7 @@
 package logic.brick;
 
+
+import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 
 /**
@@ -27,4 +29,6 @@ public class GlassBrick extends AbstractBrick {
 	public boolean isGlassBrick(){
 		return true;
 	}
+
+
 }

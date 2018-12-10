@@ -94,4 +94,16 @@ public class PlayableLevelTest{
         assertEquals(new PlayableLevel("Only GlassBricks", 10, 1, 0, 0).getPoints(), 500);
         assertEquals(new PlayableLevel("Only WoodenBricks", 10, 0, 0, 0).getPoints(), 2000);
     }
+
+    @Test
+    public void hittingBrickTest(){
+        for(Brick brick: level.getBricks()){
+            while (!brick.isDestroyed()) {
+                brick.hit();
+            }
+        }
+
+        assertEquals(level.getPoints(), level.getCurrentPoints());
+
+    }
 }
