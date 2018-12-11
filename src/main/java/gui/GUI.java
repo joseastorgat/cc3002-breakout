@@ -3,6 +3,7 @@ package gui;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
@@ -13,17 +14,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static gui.BreakoutFactory.*;
 import facade.HomeworkTwoFacade;
+import logic.brick.Brick;
+import logic.level.Level;
+import logic.level.PlayableLevel;
 
 public class GUI extends GameApplication {
 
     private HomeworkTwoFacade game;
     private Entity player;
-
-
+    private Random random;
 
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(800);
@@ -34,13 +39,11 @@ public class GUI extends GameApplication {
 
     @Override
     protected void initGame() {
-        player = newPlayer(350, 700);
+        player = newPlayer(300, 700);
         Entity ball = newBall(390, 680);
         getGameWorld().addEntities(newBackground(), player, ball, newWalls(), newInfoBar());
-
         game = new HomeworkTwoFacade();
-
-
+        random = new Random();
     }
 
 
@@ -71,6 +74,16 @@ public class GUI extends GameApplication {
                 player.getComponent(PlayerControl.class).stop();
             }
         }, KeyCode.D);
+
+
+        input.addAction(new UserAction("Add Level") {
+            @Override
+            protected void onActionBegin() {
+                game.setCurrentLevel(game.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (15*random.nextDouble()), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
+                createBricks();
+
+            }
+        }, KeyCode.N);
     }
 
     @Override
@@ -86,6 +99,20 @@ public class GUI extends GameApplication {
                         }
                     }
                 });
+
+        getPhysicsWorld().addCollisionHandler(
+                new CollisionHandler(BreakoutGameType.BALL, BreakoutGameType.BRICK) {
+                    @Override
+                    protected void onHitBoxTrigger(Entity ball, Entity brick,
+                                                   HitBox boxBall, HitBox boxBrick) {
+                        System.out.println("brick hitted");
+                        brick.getComponent(BrickControl.class).hit();
+
+                        if(brick.getComponent(BrickControl.class).isDestroyed()){
+                            brick.removeFromWorld();
+                        }
+                        }
+                    });
     }
 
     @Override
@@ -128,6 +155,36 @@ public class GUI extends GameApplication {
         textBallsLeft.setTranslateX(tx3);
         textBallsLeft.setTranslateY(ty);
         getGameScene().addUINodes(textTotalScore, textCurrentScore, textBallsLeft, textTotalLevel, textCurrentLevel);
+    }
+
+    private void deleteElements() {
+        GameWorld world = getGameWorld();
+        world.removeEntities(world.getEntitiesByType(BreakoutGameType.BRICK));
+    }
+
+    private void createBricks(){
+        deleteElements();
+
+        int leftMargin = 50;
+        int supMargin  = 150;
+        int maxRight = 700;
+
+        int posx = leftMargin;
+        int posy = supMargin;
+
+        System.out.println(game.numberOfBricks());
+        for(Brick brick: game.getBricks()){
+            if(posx > maxRight){
+                posx = leftMargin;
+                posy+=50;
+            }
+            getGameWorld().addEntity(newBrick(posx, posy, brick));
+            posx+=100;
+
+        }
+
+        Entity ball = newBall(390, 680);
+        getGameWorld().addEntity(ball);
     }
 
     public static void main(String... args) {

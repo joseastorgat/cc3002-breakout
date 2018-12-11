@@ -13,10 +13,9 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import logic.brick.Brick;
 
 public final class BreakoutFactory {
-
-
     static Entity newPlayer(double x, double y) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
@@ -28,8 +27,8 @@ public final class BreakoutFactory {
         return Entities.builder()
                 .at(x, y)
                 .type(BreakoutGameType.PLAYER)
-                .bbox(new HitBox("Player", BoundingShape.box(100, 30)))
-                .viewFromNode(new Rectangle(100, 30, Color.BLUE))
+                .bbox(new HitBox("Player", BoundingShape.box(200, 30)))
+                .viewFromNode(new Rectangle(200, 30, Color.BLUE))
                 .with(physics, new CollidableComponent(true), new PlayerControl())
                 .build();
     }
@@ -76,4 +75,28 @@ public final class BreakoutFactory {
                 .with(new PhysicsComponent(), new CollidableComponent(true))
                 .build();
     }
+
+    static Entity newBrick(int posx, int posy, Brick brick){
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.STATIC);
+
+        Color color;
+        if (brick.isGlassBrick()){
+            color = Color.BLUE;
+        }
+        else if (brick.isWoodenBrick()){
+            color = Color.BURLYWOOD;
+        }
+        else{
+            color = Color.GREY;
+        }
+        return Entities.builder()
+                .at(posx, posy)
+                .type(BreakoutGameType.BRICK)
+                .bbox(new HitBox("Brick", BoundingShape.box(100, 40)))
+                .viewFromNode(new Rectangle(100, 40, color))
+                .with(physics, new CollidableComponent(true), new BrickControl(brick))
+                .build();
+    }
+
 }
