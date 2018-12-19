@@ -146,6 +146,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
      *
      * @param points points to be added
      */
+    @Override
     public void addPoints(int points) {
         currentPoints+=points;
     }
@@ -155,6 +156,8 @@ public class PlayableLevel extends Observable implements Observer, Level  {
      *
      * @return currentPoints obtained in the level
      */
+
+    @Override
     public int getCurrentPoints() {
         return currentPoints;
     }

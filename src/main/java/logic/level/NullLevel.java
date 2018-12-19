@@ -55,9 +55,16 @@ public class NullLevel implements Level {
     }
 
     @Override
+    public int getCurrentPoints(){return 0;}
+
+    @Override
+    public void addPoints(int points){}
+
+    @Override
     public void accept(Visitor visitor){
         visitor.visitEmptyLevel(this);
     }
+
     @Override
     public void subscribe(Observer observer){
     }

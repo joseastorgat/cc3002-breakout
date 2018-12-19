@@ -76,6 +76,24 @@ public interface Level {
      */
     void setNextLevel(Level level);
 
+
+
+    /**
+     * Method to add points to a Lvl
+     *
+     * @param points points to be added
+     */
+    void addPoints(int points);
+
+    /**
+     * Method to get current points of the level
+     *
+     * @return currentPoints obtained in the level
+     */
+
+    int getCurrentPoints();
+
+
     /**
      * Accept the visit of a {@link Visitor}
      * @param visitor Visitor visiting

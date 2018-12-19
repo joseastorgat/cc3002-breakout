@@ -54,10 +54,18 @@ public class NullLevelTest {
     public void getPointsTest() {
         assertEquals(level.getPoints(), 0);
     }
+
     @Test
     public void setNextLevelTest(){
         level.setNextLevel(new PlayableLevel("test",0,0,0,0));
         assertFalse(level.hasNextLevel());
     }
 
+    @Test
+    public void pointsManagementTest(){
+        assertEquals(level.getPoints(), 0);
+        assertEquals(level.getCurrentPoints(), 0);
+        level.addPoints(1000);
+        assertEquals(level.getCurrentPoints(), 0);
+    }
 }
