@@ -22,7 +22,7 @@ public final class BreakoutFactory {
         physics.setFixtureDef(
                 new FixtureDef()
                         .restitution(0f)
-                        .density(1000f));
+                        .density(100000f));
 
         return Entities.builder()
                 .at(x, y)
@@ -47,8 +47,8 @@ public final class BreakoutFactory {
         physics.setFixtureDef(
                 new FixtureDef()
                     .restitution(1f)
-                    .density(0.1f)
-                    .friction(0f));
+                    .density(0f)
+                    .friction(0.2f));
 
         return Entities.builder()
                 .at(x, y)
@@ -80,23 +80,40 @@ public final class BreakoutFactory {
         physics.setBodyType(BodyType.STATIC);
 
         Color color;
-
+        String sound;
         if (brick.isGlassBrick()){
             color = Color.BLUE;
+            sound = "glassHit.wav";
+
+
         }
         else if (brick.isWoodenBrick()){
             color = Color.BURLYWOOD;
+            sound = "woodenHit.wav";
         }
         else{
             color = Color.GREY;
+            sound = "metalHit.wav";
         }
         return Entities.builder()
                 .at(posx, posy)
                 .type(BreakoutGameType.BRICK)
                 .bbox(new HitBox("Brick", BoundingShape.box(100, 40)))
                 .viewFromNode(new Rectangle(100, 40, color))
-                .with(physics, new CollidableComponent(true), new BrickControl(brick))
+                .with(physics, new CollidableComponent(true), new BrickControl(brick, sound))
                 .build();
     }
+
+     static Entity newBonus(double x, double y) {
+
+
+            return Entities.builder()
+                    .at(x, y)
+                    .type(BreakoutGameType.BONUS)
+                    .bbox(new HitBox("Bonus", BoundingShape.box(30, 30)))
+                    .viewFromNode(new Rectangle(30, 30, Color.GOLDENROD))
+                    .with(new CollidableComponent(true))
+                    .build();
+        }
 
 }
