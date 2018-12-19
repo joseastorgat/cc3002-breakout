@@ -13,7 +13,7 @@ import java.util.Observer;
  *
  * @author José Astorga
  */
-public class Game implements Observer {
+public class Game extends Observable implements Observer {
     private Level level;
     private int balls;
     private int points;
@@ -122,8 +122,9 @@ public class Game implements Observer {
         if(!level.hasNextLevel()) {
             won = true;
         }
-
         setCurrentLevel(level.getNextLevel());
+        this.setChanged();
+        this.notifyObservers();
 
     }
 

@@ -47,16 +47,15 @@ public final class BreakoutFactory {
         physics.setFixtureDef(
                 new FixtureDef()
                     .restitution(1f)
-                    .density(0.1f));
+                    .density(0.1f)
+                    .friction(0f));
 
-        physics.setOnPhysicsInitialized(
-                () -> physics.setLinearVelocity(5 * 30, -5 * 30));
         return Entities.builder()
                 .at(x, y)
                 .type(BreakoutGameType.BALL)
                 .bbox(new HitBox("Ball", BoundingShape.circle(10)))
                 .viewFromNode(new Circle(10, Color.LIGHTCORAL))
-                .with(physics, new CollidableComponent(true))
+                .with(physics, new CollidableComponent(true), new BallControl())
                 .build();
     }
 
@@ -81,6 +80,7 @@ public final class BreakoutFactory {
         physics.setBodyType(BodyType.STATIC);
 
         Color color;
+
         if (brick.isGlassBrick()){
             color = Color.BLUE;
         }

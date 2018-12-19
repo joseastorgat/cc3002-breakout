@@ -188,4 +188,9 @@ public class HomeworkTwoFacade {
     public boolean winner() {
         return game.winner();
     }
+
+
+    public Game getGame(){
+        return game;
+    }
 }

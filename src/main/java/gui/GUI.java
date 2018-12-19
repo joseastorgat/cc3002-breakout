@@ -14,19 +14,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static gui.BreakoutFactory.*;
-import facade.HomeworkTwoFacade;
+
 import logic.brick.Brick;
-import logic.level.Level;
-import logic.level.PlayableLevel;
 
-public class GUI extends GameApplication {
+public class GUI extends GameApplication implements Observer {
 
-    private HomeworkTwoFacade game;
+    private HomeworkTwoFacade facade;
     private Entity player;
     private Random random;
 
@@ -40,12 +36,19 @@ public class GUI extends GameApplication {
     @Override
     protected void initGame() {
         player = newPlayer(300, 700);
-        Entity ball = newBall(390, 680);
-        getGameWorld().addEntities(newBackground(), player, ball, newWalls(), newInfoBar());
-        game = new HomeworkTwoFacade();
-        random = new Random();
-    }
+        getGameWorld().addEntities(newBackground(), player,newBall(390, 680), newWalls(), newInfoBar());
 
+        facade = new HomeworkTwoFacade();
+        facade.getGame().addObserver(this);
+
+        random = new Random();
+
+        getGameState().<Integer>addListener("balls_left", (old, newScore) -> {
+            if(facade.isGameOver()) {
+                gameOver();
+            }
+        });
+    }
 
     @Override
     protected void initInput() {
@@ -79,11 +82,25 @@ public class GUI extends GameApplication {
         input.addAction(new UserAction("Add Level") {
             @Override
             protected void onActionBegin() {
-                game.setCurrentLevel(game.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (15*random.nextDouble()), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
-                createBricks();
-
+                if(getGameState().getInt("total_levels")==0){
+                    facade.setCurrentLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (15*random.nextDouble()), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
+                    generateLevel();
+                }
+                else{
+                    facade.addPlayingLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (15*random.nextDouble()), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
+                }
+                getGameState().setValue("total_levels", getGameState().getInt("total_levels")+1);
             }
         }, KeyCode.N);
+
+        input.addAction(new UserAction("Throw Ball") {
+            @Override
+            protected void onActionBegin() {
+                getGameWorld().getEntitiesByType(BreakoutGameType.BALL)
+                        .forEach(e -> e.getComponent(BallControl.class).shoot());
+            }
+        }, KeyCode.SPACE);
+
     }
 
     @Override
@@ -95,7 +112,12 @@ public class GUI extends GameApplication {
                     protected void onHitBoxTrigger(Entity ball, Entity wall,
                                                    HitBox boxBall, HitBox boxWall) {
                         if (boxWall.getName().equals("BOT")) {
+                            facade.dropBall();
                             ball.removeFromWorld();
+                            if(!facade.isGameOver()){
+                                getGameWorld().addEntity(newBall(player.getPosition().getX()+100, player.getPosition().getY()-20));
+
+                            }
                         }
                     }
                 });
@@ -105,14 +127,14 @@ public class GUI extends GameApplication {
                     @Override
                     protected void onHitBoxTrigger(Entity ball, Entity brick,
                                                    HitBox boxBall, HitBox boxBrick) {
-                        System.out.println("brick hitted");
+
                         brick.getComponent(BrickControl.class).hit();
 
                         if(brick.getComponent(BrickControl.class).isDestroyed()){
                             brick.removeFromWorld();
                         }
-                        }
-                    });
+                    }
+                });
     }
 
     @Override
@@ -157,14 +179,25 @@ public class GUI extends GameApplication {
         getGameScene().addUINodes(textTotalScore, textCurrentScore, textBallsLeft, textTotalLevel, textCurrentLevel);
     }
 
-    private void deleteElements() {
+
+    @Override
+    protected void onUpdate(double tpf){
+
+        getGameState().setValue("total_score", facade.getCurrentPoints());
+        getGameState().setValue("level_score", facade.getCurrentLevel().getCurrentPoints());
+        getGameState().setValue("balls_left", facade.getBallsLeft());
+
+    }
+
+    private void removeBricks() {
         GameWorld world = getGameWorld();
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BRICK));
     }
 
-    private void createBricks(){
-        deleteElements();
+    private void generateLevel(){
+        removeBricks();
 
+        getGameState().setValue("current_level", getGameState().getInt("current_level")+1);
         int leftMargin = 50;
         int supMargin  = 150;
         int maxRight = 700;
@@ -172,8 +205,14 @@ public class GUI extends GameApplication {
         int posx = leftMargin;
         int posy = supMargin;
 
-        System.out.println(game.numberOfBricks());
-        for(Brick brick: game.getBricks()){
+        int n = facade.numberOfBricks();
+
+        List<Brick> bricks = facade.getBricks();
+
+//        for(Brick brick : facade.getBricks()){
+        for(int i=0; i<n; i++){
+            Brick brick = bricks.get(random.nextInt(n-i));
+            bricks.remove(brick);
             if(posx > maxRight){
                 posx = leftMargin;
                 posy+=50;
@@ -183,12 +222,21 @@ public class GUI extends GameApplication {
 
         }
 
-        Entity ball = newBall(390, 680);
-        getGameWorld().addEntity(ball);
+    }
+
+
+    private void gameOver() {
+        getDisplay().showMessageBox("Game Over", this::exit);
     }
 
     public static void main(String... args) {
         launch(args);
     }
 
+    public void update(Observable o, Object arg){
+        if (!facade.isGameOver())
+            this.generateLevel();
+        else
+            gameOver();
+    }
 }
