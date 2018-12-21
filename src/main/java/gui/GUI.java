@@ -36,7 +36,7 @@ public class GUI extends GameApplication implements Observer {
     @Override
     protected void initGame() {
         player = newPlayer(300, 700);
-        getGameWorld().addEntities(newBackground(), player,newBall(390, 680), newWalls(), newInfoBar());
+        getGameWorld().addEntities(newBackground(), player, newWalls(), newInfoBar());
 
         facade = new HomeworkTwoFacade();
         facade.getGame().addObserver(this);
@@ -48,6 +48,7 @@ public class GUI extends GameApplication implements Observer {
                 gameOver();
             }
         });
+        getAssetLoader().cache();
     }
 
     @Override
@@ -87,7 +88,7 @@ public class GUI extends GameApplication implements Observer {
                     generateLevel();
                 }
                 else{
-                    facade.addPlayingLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (15*random.nextDouble()), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
+                    facade.addPlayingLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (5+random.nextInt(20)), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
                 }
                 getGameState().setValue("total_levels", getGameState().getInt("total_levels")+1);
             }
@@ -112,11 +113,14 @@ public class GUI extends GameApplication implements Observer {
                     protected void onHitBoxTrigger(Entity ball, Entity wall,
                                                    HitBox boxBall, HitBox boxWall) {
                         if (boxWall.getName().equals("BOT")) {
-                            facade.dropBall();
-                            ball.removeFromWorld();
-                            if(!facade.isGameOver()){
-                                getGameWorld().addEntity(newBall(player.getPosition().getX()+100, player.getPosition().getY()-20));
 
+                            ball.removeFromWorld();
+                            if(getGameWorld().getEntitiesByType(BreakoutGameType.BALL).size()==0){
+                                facade.dropBall();
+                                if(!facade.isGameOver()) {
+                                    getGameWorld().addEntity(newBall(player.getPosition().getX() + 100, player.getPosition().getY() - 20));
+                                    getAudioPlayer().playSound("death.wav");
+                                }
                             }
                         }
                     }
@@ -132,7 +136,39 @@ public class GUI extends GameApplication implements Observer {
 
                         if(brick.getComponent(BrickControl.class).isDestroyed()){
                             brick.removeFromWorld();
+                            if(random.nextDouble()<0.9){
+                                getGameWorld().addEntity(newBonus(ball.getX(),ball.getY()+10));
+                            }
                         }
+                    }
+                });
+        getPhysicsWorld().addCollisionHandler(
+                new CollisionHandler(BreakoutGameType.PLAYER, BreakoutGameType.BONUS) {
+                    @Override
+                    protected void onHitBoxTrigger(Entity player, Entity bonus,
+                                                   HitBox boxPlayer, HitBox boxBonus) {
+
+                        bonus.removeFromWorld();
+                    }
+                });
+
+        getPhysicsWorld().addCollisionHandler(
+                new CollisionHandler(BreakoutGameType.BONUS, BreakoutGameType.WALL) {
+                    @Override
+                    protected void onHitBoxTrigger(Entity bonus, Entity wall,
+                                                   HitBox boxBonus, HitBox boxWall) {
+                        if (boxWall.getName().equals("BOT")) {
+                            bonus.removeFromWorld();
+                        }
+                    }
+                });
+        getPhysicsWorld().addCollisionHandler(
+                new CollisionHandler(BreakoutGameType.PLAYER, BreakoutGameType.BALL) {
+                    @Override
+                    protected void onHitBoxTrigger(Entity player, Entity ball,
+                                                   HitBox boxPlayer, HitBox ballBonus) {
+
+                        getAudioPlayer().playSound("ballBounce.wav");
                     }
                 });
     }
@@ -187,21 +223,27 @@ public class GUI extends GameApplication implements Observer {
         getGameState().setValue("level_score", facade.getCurrentLevel().getCurrentPoints());
         getGameState().setValue("balls_left", facade.getBallsLeft());
 
+        getGameWorld().getEntitiesByType(BreakoutGameType.BONUS)
+                .forEach(e -> e.translateY(5));
+
     }
 
-    private void removeBricks() {
+    private void clearWorld() {
         GameWorld world = getGameWorld();
+        world.removeEntities(world.getEntitiesByType(BreakoutGameType.BONUS));
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BRICK));
+        world.removeEntities(world.getEntitiesByType(BreakoutGameType.BALL));
     }
 
     private void generateLevel(){
-        removeBricks();
-
+        clearWorld();
+        getAudioPlayer().playSound("levelup.wav");
         getGameState().setValue("current_level", getGameState().getInt("current_level")+1);
         int leftMargin = 50;
         int supMargin  = 150;
         int maxRight = 700;
 
+        getGameWorld().addEntity(newBall(player.getX()+100, player.getY()-25));
         int posx = leftMargin;
         int posy = supMargin;
 
@@ -224,9 +266,18 @@ public class GUI extends GameApplication implements Observer {
 
     }
 
-
     private void gameOver() {
         getDisplay().showMessageBox("Game Over", this::exit);
+    }
+
+    public void extraBallBonus(){
+        Entity extraBall = newBall(player.getX(),player.getY());
+        getGameWorld().addEntity(extraBall);
+        extraBall.getComponent(BallControl.class).shoot();
+    }
+
+    public void addExtraPoints(int points){
+        facade.getGame().updatePoints(points);
     }
 
     public static void main(String... args) {

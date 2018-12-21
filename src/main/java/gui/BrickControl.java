@@ -10,13 +10,10 @@ public class BrickControl extends Component {
     public BrickControl(Brick newBrick, String s){
         brick = newBrick;
         sound = s;
-
     }
-
     public void hit(){
         brick.hit();
         FXGL.getAudioPlayer().playSound(sound);
-
     }
 
     public boolean isDestroyed(){
