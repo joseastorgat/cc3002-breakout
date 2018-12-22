@@ -13,8 +13,16 @@ import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import logic.bonus.Bonus;
 import logic.brick.Brick;
 
+
+/**
+ *
+ * BreakoutFactory is a Factory to BreakoutGame Entities
+ *
+ * @author José Astorga
+ */
 public final class BreakoutFactory {
     static Entity newPlayer(double x, double y) {
         PhysicsComponent physics = new PhysicsComponent();
@@ -58,6 +66,7 @@ public final class BreakoutFactory {
                 .with(physics, new CollidableComponent(true), new BallControl())
                 .build();
     }
+
 
     static Entity newWalls() {
         Entity walls = Entities.makeScreenBounds(100);
@@ -104,24 +113,25 @@ public final class BreakoutFactory {
                 .build();
     }
 
-     static Entity newBonus(double x, double y) {
+     static Entity newBonus(double x, double y, Bonus bonus, String img) {
             return Entities.builder()
                     .at(x, y)
                     .type(BreakoutGameType.BONUS)
-                    .bbox(new HitBox("Bonus", BoundingShape.box(30, 30)))
-                    .viewFromNode(new Rectangle(30, 30, Color.GOLDENROD))
-                    .with(new CollidableComponent(true))
+                    .bbox(new HitBox("Bonus", BoundingShape.circle(50)))
+                    .viewFromTextureWithBBox(img)
+                    .with(new CollidableComponent(true), new BonusControl(bonus))
                     .build();
         }
+        static Entity newBallBonus(double x, double y, Bonus bonus){
+            return newBonus(x, y, bonus, "watermelon.png");
 
-//    static Entity newBallIndicator(double x, double y) {
-//        return Entities.builder()
-//                .at(x, y)
-//                .type(BreakoutGameType.BALL)
-//                .bbox(new HitBox("BallIndicator", BoundingShape.circle(5)))
-//                .viewFromNode(new Circle(10, Color.LIGHTCORAL))
-//                .build();
-//    }
+        }
+
+    static Entity newPointsBonus(double x, double y, Bonus bonus){
+        return newBonus(x, y, bonus, "orange.png");
+
+    }
+
 
 
 }

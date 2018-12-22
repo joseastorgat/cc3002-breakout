@@ -170,7 +170,7 @@ public class Game extends Observable implements Observer {
      *
      * @param b Bonus to set as ExtraBallBonus
      */
-    public void setExtraBallBonus(ExtraBallBonus b){
+    public void setExtraBallBonus(Bonus b){
         extraBallBonus = b;
         extraBallBonus.addObserver(this);
     }
@@ -181,7 +181,7 @@ public class Game extends Observable implements Observer {
      * @param b Bonus to set as ExtraPointsBonus
      */
 
-    public void setExtraPointsBonus(ExtraPointsBonus b){
+    public void setExtraPointsBonus(Bonus b){
         extraPointsBonus = b;
         extraPointsBonus.addObserver(this);
     }
@@ -219,7 +219,6 @@ public class Game extends Observable implements Observer {
 
         }
     }
-
 
     /**
      * Accept a visit from a {@link Visitor}

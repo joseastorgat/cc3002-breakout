@@ -31,8 +31,11 @@ public class BallControl extends Component {
         }
         double velx = physics.getVelocityX();
         double vely = physics.getVelocityY();
-        if(vely<5 && vely>-5){
-            vely = -50;
+        if(vely<10 && vely>0){
+            vely = 120;
+        }
+        else if(vely>-10 && vely<0){
+            vely = -120;
         }
         double vel = Math.sqrt(velx*velx+vely*vely);
         if(vel>0){

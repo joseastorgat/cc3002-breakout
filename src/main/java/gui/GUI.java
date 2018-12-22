@@ -4,6 +4,7 @@ package gui;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
+import com.almasb.fxgl.gameplay.GameState;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
@@ -30,6 +31,7 @@ public class GUI extends GameApplication implements Observer {
     private HomeworkTwoFacade facade;
     private Entity player;
     private Random random;
+    private boolean inGame;
 
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(800);
@@ -40,16 +42,10 @@ public class GUI extends GameApplication implements Observer {
 
     @Override
     protected void initGame() {
-        player = newPlayer(300, 700);
-        getGameWorld().addEntities(newBackground(), player, newWalls(), newInfoBar());
 
-        facade = new HomeworkTwoFacade();
-        facade.getGame().addObserver(this);
+        createWorld();
 
-        facade.getGame().setExtraPointsBonus(new ExtraPointsBonus(System.currentTimeMillis()));
-        facade.getGame().setExtraBallBonus(new ExtraBallBonus());
-
-        random = new Random();
+        getAudioPlayer().playMusic("BossTheme.mp3");
 
         getGameState().<Integer>addListener("balls_left", (old, newScore) -> {
             if(facade.isGameOver()) {
@@ -58,11 +54,26 @@ public class GUI extends GameApplication implements Observer {
         });
 
         getGameState().<Integer>addListener("extra_balls", (old, newScore) -> {
-            for(int i = old; i<newScore; i++){
+            if(newScore!=0)
                 extraBall();
-            }
+
         });
         getAssetLoader().cache();
+    }
+
+    protected void createWorld(){
+        inGame = false;
+        player = newPlayer(300, 700);
+        getGameWorld().addEntities(newBackground(), player, newWalls(), newInfoBar());
+
+        facade = new HomeworkTwoFacade();
+        facade.addGameObserver(this);
+
+        facade.setExtraPointsBonus(new ExtraPointsBonus(System.currentTimeMillis()));
+        facade.setExtraBallBonus(new ExtraBallBonus());
+
+        random = new Random();
+
     }
 
     @Override
@@ -72,7 +83,8 @@ public class GUI extends GameApplication implements Observer {
         input.addAction(new UserAction("Move Left") {
             @Override
             protected void onAction() {
-                player.getComponent(PlayerControl.class).moveLeft();
+                if(inGame)
+                    player.getComponent(PlayerControl.class).moveLeft();
             }
 
             @Override
@@ -84,7 +96,8 @@ public class GUI extends GameApplication implements Observer {
         input.addAction(new UserAction("Move Right") {
             @Override
             protected void onAction() {
-                player.getComponent(PlayerControl.class).moveRight();
+                if(inGame)
+                    player.getComponent(PlayerControl.class).moveRight();
             }
 
             @Override
@@ -102,7 +115,8 @@ public class GUI extends GameApplication implements Observer {
                     generateLevel();
                 }
                 else{
-                    facade.addPlayingLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (5+random.nextInt(20)), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
+                    if(!facade.isGameOver())
+                        facade.addPlayingLevel(facade.newLevelWithBricksFull(String.format("Level %d", getGameState().getInt("total_levels")+1), (int) Math.ceil (5+random.nextInt(20)), random.nextDouble(), random.nextDouble(), (int) System.currentTimeMillis()));
                 }
                 getGameState().setValue("total_levels", getGameState().getInt("total_levels")+1);
             }
@@ -111,8 +125,10 @@ public class GUI extends GameApplication implements Observer {
         input.addAction(new UserAction("Throw Ball") {
             @Override
             protected void onActionBegin() {
-                getGameWorld().getEntitiesByType(BreakoutGameType.BALL)
-                        .forEach(e -> e.getComponent(BallControl.class).shoot());
+                if(!inGame)
+                    getGameWorld().getEntitiesByType(BreakoutGameType.BALL)
+                            .forEach(e -> e.getComponent(BallControl.class).shoot());
+                    inGame = true;
             }
         }, KeyCode.SPACE);
 
@@ -130,8 +146,11 @@ public class GUI extends GameApplication implements Observer {
 
                             ball.removeFromWorld();
                             if(getGameWorld().getEntitiesByType(BreakoutGameType.BALL).size()==0){
+                                inGame = false;
                                 facade.dropBall();
+                                player.getComponent(PlayerControl.class).stop();
                                 if(!facade.isGameOver()) {
+
                                     getGameWorld().addEntity(newBall(player.getPosition().getX() + 100, player.getPosition().getY() - 20));
                                     getAudioPlayer().playSound("death.wav");
                                 }
@@ -150,8 +169,13 @@ public class GUI extends GameApplication implements Observer {
 
                         if(brick.getComponent(BrickControl.class).isDestroyed()){
                             brick.removeFromWorld();
-                            if(random.nextDouble()<0.9){
-                                getGameWorld().addEntity(newBonus(ball.getX(),ball.getY()+10));
+                            double p =random.nextDouble();
+                            getAudioPlayer().playSound("explotion.wav");
+                            if(p<0.1){
+                                getGameWorld().addEntity(newBallBonus(ball.getX(),ball.getY()+10, facade.getExtraBallBonus()));
+                            }
+                            else if(p<0.15){
+                                getGameWorld().addEntity(newPointsBonus(ball.getX(),ball.getY()+10, facade.getExtraPointsBonus()));
                             }
                         }
                     }
@@ -163,12 +187,7 @@ public class GUI extends GameApplication implements Observer {
                                                    HitBox boxPlayer, HitBox boxBonus) {
 
                         bonus.removeFromWorld();
-
-                        if(random.nextDouble()<0.5)
-                            facade.getGame().getExtraBallBonus().triggerBonus();
-                        else
-                            facade.getGame().getExtraPointsBonus().triggerBonus();
-
+                        bonus.getComponent(BonusControl.class).trigger();
 
                     }
                 });
@@ -202,6 +221,17 @@ public class GUI extends GameApplication implements Observer {
         vars.put("total_levels", 0);
         vars.put("balls_left", 0);
         vars.put("extra_balls", 0);
+    }
+
+    protected void reinitGameVars(){
+        GameState gs = getGameState();
+        gs.setValue("total_score", 0);
+        gs.setValue("level_score", 0);
+        gs.setValue("current_level", 0);
+        gs.setValue("total_levels", 0);
+        gs.setValue("balls_left", 3);
+        gs.setValue("extra_balls", 0);
+
     }
 
     @Override
@@ -239,19 +269,15 @@ public class GUI extends GameApplication implements Observer {
 
 
     @Override
-    protected void onUpdate(double tpf){
+    protected void onUpdate(double tpf) {
 
         getGameState().setValue("total_score", facade.getCurrentPoints());
         getGameState().setValue("level_score", facade.getCurrentLevel().getCurrentPoints());
         getGameState().setValue("balls_left", facade.getBallsLeft());
-        getGameState().setValue("extra_balls", facade.getGame().getExtraBalls());
-
-        getGameWorld().getEntitiesByType(BreakoutGameType.BONUS)
-                .forEach(e -> e.translateY(5));
-
+        getGameState().setValue("extra_balls", facade.getExtraBalls());
     }
 
-    private void clearWorld() {
+    private void clearLevel() {
         GameWorld world = getGameWorld();
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BONUS));
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BRICK));
@@ -259,7 +285,8 @@ public class GUI extends GameApplication implements Observer {
     }
 
     private void generateLevel(){
-        clearWorld();
+        clearLevel();
+        inGame=false;
         getAudioPlayer().playSound("levelup.wav");
         getGameState().setValue("current_level", getGameState().getInt("current_level")+1);
         int leftMargin = 50;
@@ -274,7 +301,6 @@ public class GUI extends GameApplication implements Observer {
 
         List<Brick> bricks = facade.getBricks();
 
-//        for(Brick brick : facade.getBricks()){
         for(int i=0; i<n; i++){
             Brick brick = bricks.get(random.nextInt(n-i));
             bricks.remove(brick);
@@ -290,7 +316,11 @@ public class GUI extends GameApplication implements Observer {
     }
 
     private void gameOver() {
-        getDisplay().showMessageBox("Game Over", this::exit);
+        getDisplay().showMessageBox("Game Over =( Jugar denuevo?", this::reinitGame);
+    }
+
+    private void winGame() {
+        getDisplay().showMessageBox("Felicitaciones, Pasaste todos los niveles, Te atreves otra vez?", this::reinitGame);
     }
 
     public void extraBall(){
@@ -304,7 +334,17 @@ public class GUI extends GameApplication implements Observer {
         if (!facade.isGameOver())
             this.generateLevel();
         else
-            gameOver();
+            winGame();
+    }
+
+
+    public void reinitGame(){
+        clearLevel();
+        GameWorld world = getGameWorld();
+        world.removeEntities(world.getEntitiesByType(BreakoutGameType.PLAYER));
+        world.removeEntities(world.getEntitiesByType(BreakoutGameType.WALL));
+        createWorld();
+        reinitGameVars();
     }
 
     public static void main(String... args) {
