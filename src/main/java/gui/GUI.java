@@ -18,8 +18,13 @@ import java.util.*;
 
 import static gui.BreakoutFactory.*;
 
+import logic.bonus.ExtraBallBonus;
+import logic.bonus.ExtraPointsBonus;
 import logic.brick.Brick;
 
+/**
+ * @author José Astorga
+ */
 public class GUI extends GameApplication implements Observer {
 
     private HomeworkTwoFacade facade;
@@ -41,11 +46,20 @@ public class GUI extends GameApplication implements Observer {
         facade = new HomeworkTwoFacade();
         facade.getGame().addObserver(this);
 
+        facade.getGame().setExtraPointsBonus(new ExtraPointsBonus(System.currentTimeMillis()));
+        facade.getGame().setExtraBallBonus(new ExtraBallBonus());
+
         random = new Random();
 
         getGameState().<Integer>addListener("balls_left", (old, newScore) -> {
             if(facade.isGameOver()) {
                 gameOver();
+            }
+        });
+
+        getGameState().<Integer>addListener("extra_balls", (old, newScore) -> {
+            for(int i = old; i<newScore; i++){
+                extraBall();
             }
         });
         getAssetLoader().cache();
@@ -105,7 +119,7 @@ public class GUI extends GameApplication implements Observer {
     }
 
     @Override
-    protected void initPhysics() {
+    protected void initPhysics(){
         getPhysicsWorld().setGravity(0,0);
         getPhysicsWorld().addCollisionHandler(
                 new CollisionHandler(BreakoutGameType.BALL, BreakoutGameType.WALL) {
@@ -149,6 +163,13 @@ public class GUI extends GameApplication implements Observer {
                                                    HitBox boxPlayer, HitBox boxBonus) {
 
                         bonus.removeFromWorld();
+
+                        if(random.nextDouble()<0.5)
+                            facade.getGame().getExtraBallBonus().triggerBonus();
+                        else
+                            facade.getGame().getExtraPointsBonus().triggerBonus();
+
+
                     }
                 });
 
@@ -180,6 +201,7 @@ public class GUI extends GameApplication implements Observer {
         vars.put("current_level", 0);
         vars.put("total_levels", 0);
         vars.put("balls_left", 0);
+        vars.put("extra_balls", 0);
     }
 
     @Override
@@ -222,6 +244,7 @@ public class GUI extends GameApplication implements Observer {
         getGameState().setValue("total_score", facade.getCurrentPoints());
         getGameState().setValue("level_score", facade.getCurrentLevel().getCurrentPoints());
         getGameState().setValue("balls_left", facade.getBallsLeft());
+        getGameState().setValue("extra_balls", facade.getGame().getExtraBalls());
 
         getGameWorld().getEntitiesByType(BreakoutGameType.BONUS)
                 .forEach(e -> e.translateY(5));
@@ -270,24 +293,22 @@ public class GUI extends GameApplication implements Observer {
         getDisplay().showMessageBox("Game Over", this::exit);
     }
 
-    public void extraBallBonus(){
+    public void extraBall(){
         Entity extraBall = newBall(player.getX(),player.getY());
         getGameWorld().addEntity(extraBall);
         extraBall.getComponent(BallControl.class).shoot();
     }
 
-    public void addExtraPoints(int points){
-        facade.getGame().updatePoints(points);
-    }
-
-    public static void main(String... args) {
-        launch(args);
-    }
-
+    @Override
     public void update(Observable o, Object arg){
         if (!facade.isGameOver())
             this.generateLevel();
         else
             gameOver();
     }
+
+    public static void main(String... args) {
+        launch(args);
+    }
+
 }

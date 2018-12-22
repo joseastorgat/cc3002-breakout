@@ -36,7 +36,7 @@ public final class BreakoutFactory {
 
     static Entity newBackground() {
         return Entities.builder()
-                .viewFromNode(new Rectangle(800, 800, Color.BLACK))
+                .viewFromTexture("bg.png")
                 .renderLayer(RenderLayer.BACKGROUND)
                 .build();
     }
@@ -79,34 +79,32 @@ public final class BreakoutFactory {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.STATIC);
 
-        Color color;
         String sound;
+        String texture;
         if (brick.isGlassBrick()){
-            color = Color.BLUE;
+            texture = "glass.jpg";
             sound = "glassHit.wav";
 
 
         }
         else if (brick.isWoodenBrick()){
-            color = Color.BURLYWOOD;
+            texture = "wood.jpg";
             sound = "woodenHit.wav";
         }
         else{
-            color = Color.GREY;
+            texture = "metal.png";
             sound = "metalHit.wav";
         }
         return Entities.builder()
                 .at(posx, posy)
                 .type(BreakoutGameType.BRICK)
                 .bbox(new HitBox("Brick", BoundingShape.box(100, 40)))
-                .viewFromNode(new Rectangle(100, 40, color))
+                .viewFromTextureWithBBox(texture)
                 .with(physics, new CollidableComponent(true), new BrickControl(brick, sound))
                 .build();
     }
 
      static Entity newBonus(double x, double y) {
-
-
             return Entities.builder()
                     .at(x, y)
                     .type(BreakoutGameType.BONUS)
@@ -115,5 +113,15 @@ public final class BreakoutFactory {
                     .with(new CollidableComponent(true))
                     .build();
         }
+
+//    static Entity newBallIndicator(double x, double y) {
+//        return Entities.builder()
+//                .at(x, y)
+//                .type(BreakoutGameType.BALL)
+//                .bbox(new HitBox("BallIndicator", BoundingShape.circle(5)))
+//                .viewFromNode(new Circle(10, Color.LIGHTCORAL))
+//                .build();
+//    }
+
 
 }

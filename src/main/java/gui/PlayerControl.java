@@ -4,7 +4,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
 
 public class PlayerControl extends Component {
-    private int velocity=100;
+    private int velocity=300;
 
     public void moveLeft(){
         entity.getComponent(PhysicsComponent.class).setLinearVelocity(-velocity,0);

@@ -4,5 +4,6 @@ public enum BreakoutGameType {
     PLAYER,
     WALL,
     BALL,
-    BRICK
+    BONUS,
+    BRICK;;
 }
