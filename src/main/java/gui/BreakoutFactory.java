@@ -24,6 +24,13 @@ import logic.brick.Brick;
  * @author José Astorga
  */
 public final class BreakoutFactory {
+
+    /**
+     * Create a Player Entities
+     * @param x Position in X axis
+     * @param y Position in Y axis
+     * @return player Entity created
+     */
     static Entity newPlayer(double x, double y) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
@@ -41,7 +48,11 @@ public final class BreakoutFactory {
                 .build();
     }
 
-
+    /**
+     * Create a Background with background image
+     *
+     * @return Backgroung Entity
+     */
     static Entity newBackground() {
         return Entities.builder()
                 .viewFromTexture("bg.png")
@@ -49,6 +60,12 @@ public final class BreakoutFactory {
                 .build();
     }
 
+    /**
+     * Create a new Ball Entity
+     * @param x Ball Position in X axis
+     * @param y Ball Position in Y axis
+     * @return ball Entity created
+     */
     static Entity newBall(double x, double y) {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
@@ -67,7 +84,10 @@ public final class BreakoutFactory {
                 .build();
     }
 
-
+    /**
+     * Create the walls for the game
+     * @return Wall created
+     */
     static Entity newWalls() {
         Entity walls = Entities.makeScreenBounds(100);
         walls.setType(BreakoutGameType.WALL);
@@ -75,6 +95,10 @@ public final class BreakoutFactory {
         return walls;
     }
 
+    /**
+     * Create a UI entity
+     * @return UI entity created
+     */
     static Entity newInfoBar(){
         return Entities.builder()
                 .at(0,0)
@@ -84,6 +108,14 @@ public final class BreakoutFactory {
                 .build();
     }
 
+    /**
+     * Generate a Brick Entity. Representation of {@link Brick} in BreakOut Game
+     *
+     * @param posx Brick Position in X axis
+     * @param posy Brick Position in Y axis
+     * @param brick {@link Brick} to represent in this Entity
+     * @return Brick Entity
+     */
     static Entity newBrick(int posx, int posy, Brick brick){
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.STATIC);
@@ -113,6 +145,14 @@ public final class BreakoutFactory {
                 .build();
     }
 
+    /**
+     * Create a Bonus Entity to represent a {@link Bonus}
+     * @param x Bonus Entity position in X axis
+     * @param y Bonus Entity position in Y axis
+     * @param bonus {@link Bonus} to represent
+     * @param img String with the name of the texture of the bonus
+     * @return Bonus Entity
+     */
      static Entity newBonus(double x, double y, Bonus bonus, String img) {
             return Entities.builder()
                     .at(x, y)
@@ -121,12 +161,27 @@ public final class BreakoutFactory {
                     .viewFromTextureWithBBox(img)
                     .with(new CollidableComponent(true), new BonusControl(bonus))
                     .build();
-        }
-        static Entity newBallBonus(double x, double y, Bonus bonus){
+    }
+
+    /**
+     * Create a Bonus Entity to representint a {@link logic.bonus.ExtraBallBonus}
+     * @param x Bonus Entity position in X axis
+     * @param y Bonus Entity position in Y axis
+     * @param bonus {@link Bonus} to represent
+     * @return Bonus Entity
+     */
+
+    static Entity newBallBonus(double x, double y, Bonus bonus){
             return newBonus(x, y, bonus, "watermelon.png");
 
         }
-
+    /**
+     * Create a Bonus Entity to representint a {@link logic.bonus.ExtraPointsBonus}
+     * @param x Bonus Entity position in X axis
+     * @param y Bonus Entity position in Y axis
+     * @param bonus {@link Bonus} to represent
+     * @return Bonus Entity
+     */
     static Entity newPointsBonus(double x, double y, Bonus bonus){
         return newBonus(x, y, bonus, "orange.png");
 

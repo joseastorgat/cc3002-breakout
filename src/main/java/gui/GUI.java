@@ -24,6 +24,8 @@ import logic.bonus.ExtraPointsBonus;
 import logic.brick.Brick;
 
 /**
+ * GUI Class, GUI implementation to BreakOut Game
+ *
  * @author José Astorga
  */
 public class GUI extends GameApplication implements Observer {
@@ -33,6 +35,7 @@ public class GUI extends GameApplication implements Observer {
     private Random random;
     private boolean inGame;
 
+    @Override
     protected void initSettings(GameSettings gameSettings) {
         gameSettings.setWidth(800);
         gameSettings.setHeight(800);
@@ -44,15 +47,12 @@ public class GUI extends GameApplication implements Observer {
     protected void initGame() {
 
         createWorld();
-
         getAudioPlayer().playMusic("BossTheme.mp3");
-
         getGameState().<Integer>addListener("balls_left", (old, newScore) -> {
             if(facade.isGameOver()) {
                 gameOver();
             }
         });
-
         getGameState().<Integer>addListener("extra_balls", (old, newScore) -> {
             if(newScore!=0)
                 extraBall();
@@ -61,6 +61,11 @@ public class GUI extends GameApplication implements Observer {
         getAssetLoader().cache();
     }
 
+    /**
+     * Create the initial world of Breakout Game
+     * <br>
+     * Create and set the Player, Walls and Facade
+     */
     protected void createWorld(){
         inGame = false;
         player = newPlayer(300, 700);
@@ -171,10 +176,10 @@ public class GUI extends GameApplication implements Observer {
                             brick.removeFromWorld();
                             double p =random.nextDouble();
                             getAudioPlayer().playSound("explotion.wav");
-                            if(p<0.1){
+                            if(p<0.5){
                                 getGameWorld().addEntity(newBallBonus(ball.getX(),ball.getY()+10, facade.getExtraBallBonus()));
                             }
-                            else if(p<0.15){
+                            else if(p<0.8){
                                 getGameWorld().addEntity(newPointsBonus(ball.getX(),ball.getY()+10, facade.getExtraPointsBonus()));
                             }
                         }
@@ -277,6 +282,9 @@ public class GUI extends GameApplication implements Observer {
         getGameState().setValue("extra_balls", facade.getExtraBalls());
     }
 
+    /**
+     * Remove the Entities of the actual Level
+     */
     private void clearLevel() {
         GameWorld world = getGameWorld();
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BONUS));
@@ -284,6 +292,9 @@ public class GUI extends GameApplication implements Observer {
         world.removeEntities(world.getEntitiesByType(BreakoutGameType.BALL));
     }
 
+    /**
+     * Generate the Entities of a new Level
+     */
     private void generateLevel(){
         clearLevel();
         inGame=false;
@@ -315,14 +326,23 @@ public class GUI extends GameApplication implements Observer {
 
     }
 
+    /**
+     * Show GameOver Message
+     */
     private void gameOver() {
         getDisplay().showMessageBox("Game Over =( Jugar denuevo?", this::reinitGame);
     }
 
+    /**
+     * Show win the Game message
+     */
     private void winGame() {
         getDisplay().showMessageBox("Felicitaciones, Pasaste todos los niveles, Te atreves otra vez?", this::reinitGame);
     }
 
+    /**
+     * Generate a new Ball Entity and shoot it
+     */
     public void extraBall(){
         Entity extraBall = newBall(player.getX(),player.getY());
         getGameWorld().addEntity(extraBall);
@@ -338,6 +358,11 @@ public class GUI extends GameApplication implements Observer {
     }
 
 
+    /**
+     * Reinitialize the actual game
+     * <br>
+     * Remove all the entities and create new ones
+     */
     public void reinitGame(){
         clearLevel();
         GameWorld world = getGameWorld();
