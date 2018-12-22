@@ -1,12 +1,17 @@
 package controller;
 
-import logic.level.NullLevel;
-import logic.level.Level;
-import visitor.ChangeLevelVisitor;
-import visitor.Visitor;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import logic.bonus.Bonus;
+import logic.bonus.ExtraBallBonus;
+import logic.bonus.ExtraPointsBonus;
+import logic.bonus.NullBonus;
+import logic.level.NullLevel;
+import logic.level.Level;
+import visitor.Visitor;
+
 
 /**
  * Game logic controller class.
@@ -18,7 +23,9 @@ public class Game extends Observable implements Observer {
     private int balls;
     private int points;
     private boolean won;
-
+    private int extraBalls;
+    private Bonus extraBallBonus;
+    private Bonus extraPointsBonus;
     /**
      * Game Constructor
      *
@@ -29,6 +36,10 @@ public class Game extends Observable implements Observer {
         balls = initBalls;
         points = 0;
         won = false;
+        extraBalls=0;
+
+        extraBallBonus = new NullBonus();
+        extraPointsBonus = new NullBonus();
     }
 
     /**
@@ -137,6 +148,63 @@ public class Game extends Observable implements Observer {
     }
 
     /**
+     * Sums 1 to the number of the extraBalls
+     *
+     */
+    public void upgradeExtraBalls() {
+        extraBalls++;
+    }
+
+    /**
+     * Get the current extraBalls number
+     *
+     * @return extraBalls number
+     */
+    public int getExtraBalls(){
+        return extraBalls;
+    }
+
+
+    /**
+     * Set the ExtraBallBonus Bonus of the game
+     *
+     * @param b Bonus to set as ExtraBallBonus
+     */
+    public void setExtraBallBonus(ExtraBallBonus b){
+        extraBallBonus = b;
+        extraBallBonus.addObserver(this);
+    }
+
+    /**
+     * Set the ExtraBallBonus Bonus of the game
+     *
+     * @param b Bonus to set as ExtraPointsBonus
+     */
+
+    public void setExtraPointsBonus(ExtraPointsBonus b){
+        extraPointsBonus = b;
+        extraPointsBonus.addObserver(this);
+    }
+    /**
+     * Get the ExtraBallBonus Bonus of the game
+     *
+     * @return Bonus to extraBalls management
+     */
+    public Bonus getExtraBallBonus(){
+        return extraBallBonus;
+    }
+
+    /**
+     * Get the ExtraPointBonus Bonus of the game
+     *
+     * @return extraPointBonus Bonus to extraPoints management
+     */
+    public Bonus getExtraPointsBonus(){
+        return extraPointsBonus;
+    }
+
+
+    /**
      * Update method, called when something change in observed {@link Level}
      * <br>
      * Update points and ball number then check if level is over.
@@ -151,6 +219,8 @@ public class Game extends Observable implements Observer {
 
         }
     }
+
+
     /**
      * Accept a visit from a {@link Visitor}
      *
@@ -159,4 +229,7 @@ public class Game extends Observable implements Observer {
     public void accept(Visitor v){
         v.visitGame(this);
     }
+
+
+
 }

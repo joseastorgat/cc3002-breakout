@@ -17,8 +17,8 @@ public class UpdateGamePointsVisitor extends Visitor {
     /**
      * UpdateGamePointsVisitor Constructor
      */
-    public UpdateGamePointsVisitor(int brickScore){
-        points = brickScore;
+    public UpdateGamePointsVisitor(int newPoints){
+        points = newPoints;
     }
 
     @Override
