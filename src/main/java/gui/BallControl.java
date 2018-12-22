@@ -27,10 +27,6 @@ public class BallControl extends Component {
         ballInGame = true;
     }
 
-    /**
-     * Stop the Ball
-     */
-
     @Override
     public void onUpdate(double tpf) {
         if(!ballInGame){

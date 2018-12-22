@@ -2,6 +2,7 @@ unnamed package
 controller
 facade
 gui
+logic.bonus
 logic.brick
 logic.level
 visitor

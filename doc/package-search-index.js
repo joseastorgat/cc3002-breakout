@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"controller"},{"l":"facade"},{"l":"gui"},{"l":"logic.brick"},{"l":"logic.level"},{"l":"visitor"}]
+packageSearchIndex = [{"l":"controller"},{"l":"facade"},{"l":"gui"},{"l":"logic.bonus"},{"l":"logic.brick"},{"l":"logic.level"},{"l":"visitor"}]
