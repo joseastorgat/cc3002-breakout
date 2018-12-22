@@ -67,5 +67,9 @@ public class NullLevelTest {
         assertEquals(level.getCurrentPoints(), 0);
         level.addPoints(1000);
         assertEquals(level.getCurrentPoints(), 0);
+
+
     }
+
+
 }

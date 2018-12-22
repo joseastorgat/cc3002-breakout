@@ -107,7 +107,7 @@ public class PlayableLevelTest{
     }
 
     @Test
-    public void pointsManagementTest(){
+    public void addPointTest(){
         assertEquals(level.getPoints(), 1550);
         assertEquals(level.getCurrentPoints(), 0);
         level.addPoints(0);
@@ -115,4 +115,20 @@ public class PlayableLevelTest{
         level.addPoints(1000);
         assertEquals(level.getCurrentPoints(), 1000);
     }
+
+    @Test
+    public void pointsManagementTest(){
+        assertEquals(level.getPoints(), 1550);
+        assertEquals(level.getCurrentPoints(), 0);
+
+        for(Brick brick : level.getBricks()){
+            while(!brick.isDestroyed()){
+                brick.hit();
+            }
+        }
+
+        assertEquals(level.getCurrentPoints(), 1550);
+        assertEquals(level.getCurrentPoints(), level.getPoints());
+    }
+
 }

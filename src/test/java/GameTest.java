@@ -1,4 +1,7 @@
 import controller.Game;
+import logic.bonus.Bonus;
+import logic.bonus.ExtraBallBonus;
+import logic.bonus.ExtraPointsBonus;
 import logic.brick.Brick;
 import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
@@ -168,5 +171,71 @@ public class GameTest{
         assertEquals(game.getBalls(), balls);
 
         assertTrue(game.isGameOver()&& game.winner());
+    }
+
+    @Test
+    public void extraBallBonusTest(){
+        assertEquals(game.getExtraBalls(),0);
+
+        Bonus exBallBonus = game.getExtraBallBonus();
+
+
+        assertEquals(game.getExtraBalls(),0);
+        exBallBonus.triggerBonus();
+        assertEquals(game.getExtraBalls(),0);
+
+        assertTrue(exBallBonus.isNullBonus());
+        assertFalse(exBallBonus.isExtraPointsBonus());
+        assertFalse(exBallBonus.isExtraBallBonus());
+
+        ExtraBallBonus bonus = new ExtraBallBonus();
+        game.setExtraBallBonus(bonus);
+
+        assertEquals(game.getExtraBallBonus(), bonus);
+        exBallBonus = game.getExtraBallBonus();
+
+        assertFalse(exBallBonus.isNullBonus());
+        assertFalse(exBallBonus.isExtraPointsBonus());
+        assertTrue(exBallBonus.isExtraBallBonus());
+
+        exBallBonus.triggerBonus();
+        assertEquals(game.getExtraBalls(), 1);
+        exBallBonus.triggerBonus();
+        assertEquals(game.getExtraBalls(), 2);
+    }
+
+
+    @Test
+    public void extraPointBonusTest(){
+        ExtraPointsBonus bonus = new ExtraPointsBonus(0);
+
+
+        PlayableLevel level = new PlayableLevel("Test1", 3, 0.5, 0.5, 0);
+        game.setCurrentLevel(level);
+
+        assertEquals( game.getCurrentLevel().getCurrentPoints(), 0);
+        assertEquals(game.getCurrentPoints(), 0);
+
+        Bonus exPointBonus = game.getExtraPointsBonus();
+
+        exPointBonus.triggerBonus();
+
+        assertEquals( game.getCurrentLevel().getCurrentPoints(), 0);
+        assertEquals(game.getCurrentPoints(), 0);
+        assertTrue(exPointBonus.isNullBonus());
+        assertFalse(exPointBonus.isExtraPointsBonus());
+        assertFalse(exPointBonus.isExtraBallBonus());
+
+
+        game.setExtraPointsBonus(bonus);
+        exPointBonus = game.getExtraPointsBonus();
+        assertTrue(exPointBonus.isExtraPointsBonus());
+        assertFalse(exPointBonus.isNullBonus());
+        assertFalse(exPointBonus.isExtraBallBonus());
+
+        exPointBonus.triggerBonus();
+        assertEquals(game.getCurrentPoints(), 35000);
+        assertEquals( game.getCurrentLevel().getCurrentPoints() , 0);
+
     }
 }
