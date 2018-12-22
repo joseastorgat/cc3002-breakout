@@ -20,6 +20,7 @@ public class PlayableLevel extends Observable implements Observer, Level  {
     private String name;
     private int currentPoints;
     private int totalPoints;
+
     /**
      * Playable Level constructor. This construct a Level with glass, wooden and metal Bricks
      *
@@ -141,21 +142,11 @@ public class PlayableLevel extends Observable implements Observer, Level  {
         addObserver(observer);
     }
 
-    /**
-     * Method to add points to a Lvl
-     *
-     * @param points points to be added
-     */
     @Override
     public void addPoints(int points) {
         currentPoints+=points;
     }
 
-    /**
-     * Method to get current points of the level
-     *
-     * @return currentPoints obtained in the level
-     */
 
     @Override
     public int getCurrentPoints() {

@@ -62,7 +62,6 @@ public class NullLevel implements Level {
 
     @Override
     public void accept(Visitor visitor){
-        visitor.visitEmptyLevel(this);
     }
 
     @Override
