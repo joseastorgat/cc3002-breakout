@@ -4,7 +4,7 @@ import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 
 /**
- * WoodenBrick class is an {@link Brick}
+ * WoodenBrick class is a {@link Brick}
  * <br>
  * 3 hit destroys it. Score 200 Points.
  *
@@ -19,15 +19,8 @@ public class WoodenBrick extends AbstractBrick {
 	}
 
 	@Override
-	public void accept(Visitor v){
-		v.visitWoodenBrick(this);
-	}
-
-	@Override
 	public boolean isWoodenBrick(){
 		return true;
 	}
-
-
 
 }

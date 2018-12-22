@@ -5,7 +5,7 @@ import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 
 /**
- * GlassBrick class is an Brick
+ * GlassBrick class is an {@link Brick}
  * <br>
  * 1 hit destroys it. Score 50 Points.
  *
@@ -18,12 +18,6 @@ public class GlassBrick extends AbstractBrick {
 	public GlassBrick(){
 		super(1, 50);
 	}
-
-	@Override
-	public void accept(Visitor v){
-		v.visitGlassBrick(this);
-	}
-
 
 	@Override
 	public boolean isGlassBrick(){

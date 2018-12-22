@@ -49,13 +49,6 @@ public abstract class AbstractBrick extends Observable implements Brick {
         return this.hits;
     }
 
-    /**
-     * Accept the visit of a {@link Visitor}
-     * @param visitor Visitor visiting brick.
-     */
-    @Override
-    public abstract void accept(Visitor visitor);
-
     @Override
     public boolean isWoodenBrick(){
         return false;
@@ -72,11 +65,11 @@ public abstract class AbstractBrick extends Observable implements Brick {
     }
 
     /**
-     * Method that create a visitor and deliver it to observers
+     * Method that create an {@link UpdateGamePointsVisitor} and deliver it to observers
      */
-    public void notifyUp()
-    {
+    public void notifyUp(){
         Visitor visitor =new UpdateGamePointsVisitor(this.getScore());
         notifyObservers(visitor);
-    }}
+    }
+}
 

@@ -40,8 +40,6 @@ public interface Brick {
      */
     int remainingHits();
 
-    void accept(Visitor visitor);
-
     /**
      * Add an Observer
      *
@@ -65,13 +63,11 @@ public interface Brick {
 
     boolean isGlassBrick();
 
-
     /**
      * Method to check if a brick is a metal brick
      *
      * @return true if the brick is a {@link MetalBrick}, false otherwise
      */
     boolean isMetalBrick();
-
 
 }

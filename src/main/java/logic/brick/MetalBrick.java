@@ -4,7 +4,7 @@ import visitor.UpgradeGameBallsVisitor;
 import visitor.Visitor;
 
 /**
- * MetalBrick class is an {@link Brick}
+ * MetalBrick class is a {@link Brick}
  * <br>
  * 10 hit destroys it. Score 0 Points.
  *
@@ -17,12 +17,6 @@ public class MetalBrick extends AbstractBrick {
 	public MetalBrick(){
 		super(10, 0);
 	}
-
-	@Override
-	public void accept(Visitor v){
-		v.visitMetalBrick(this);
-	}
-
 
 	@Override
 	public boolean isMetalBrick(){
