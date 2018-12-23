@@ -1,7 +1,7 @@
 # cc3002-breakout
 Tarea 3 CC3002 - Breakout
 
-Implementación de Interfaz Gráfica para Juego BreakOut
+Implementación de Juego BreakOut utilizando [FXGL](https://github.com/AlmasB/FXGL)
 
 Autor: José Astorga 
        Juan Pablo Silva (Código Base de HomeWorkTwoFacade y BigTest2)
@@ -15,7 +15,8 @@ Para jugar: Ejecutar gui.GUI.
 
 ### Como Jugar
 Destruye todos los ladrillos! y aprovecha de tomar todos los bonus frutales, Sandias otorgan puntos automáticamente y las Naranjas te entregan una nueva bola para que puedes acabar con el nivel actual más rápidamente.
-Keys:
+
+- Keys:
 	- N:  Para añadir niveles. Debes añadir los niveles a jugar manualmente, una vez que el juego haya acabado no podrás seguir añadiendo niveles.
 	- Espacio: Para iniciar el movimiento de la Bola y Movimiento especial cuando bola se encuentra estancada horizontalmente
 	- A y D para desplazarse horizontalmente, te puedes mover siempre que haya al menos una bola en juego :)
@@ -101,6 +102,13 @@ Se aplicaron los siguientes patrones de diseño:
 	- UpdateGamePointsVisitor: Visitor para actualizar puntos de Game y Level actual.
 	- UpgradeGameBallsVisitor: Visitor para actualizar balls de Game.
 
+##### Diagrama UML
+![alt text](uml/breakout_complete.png)
+
+
+#### Doc
+Documentación javaDoc en directorio [/doc](/doc)
+
 #### Texturas y Efectos de Sonido
 
 Todas las texturas y sonidos son de dominio público excepto por la música (CC v.4), a continuación sus fuentes:
@@ -117,10 +125,3 @@ Todas las texturas y sonidos son de dominio público excepto por la música (CC 
 - Hit Bricks y Bounce Player:  [source](https://opengameart.org/content/512-sound-effects-8-bit-style) 
 - Break Brick: [source](https://opengameart.org/content/8-bit-explosions-1)
 - Musica: BossTheme by tcarisland [source](https://opengameart.org/content/boss-theme-1) [licencia](https://creativecommons.org/licenses/by/4.0/)
-
-#### Diagrama UML
-![alt text](uml/breakout_complete.png)
-
-
-### Doc
-Documentación javaDoc en directorio [/doc](/doc)
