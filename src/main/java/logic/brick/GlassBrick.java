@@ -1,8 +1,6 @@
 package logic.brick;
 
 
-import visitor.UpdateGamePointsVisitor;
-import visitor.Visitor;
 
 /**
  * GlassBrick class is an {@link Brick}

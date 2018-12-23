@@ -1,7 +1,6 @@
 package logic.brick;
 
 import visitor.UpgradeGameBallsVisitor;
-import visitor.Visitor;
 
 /**
  * MetalBrick class is a {@link Brick}

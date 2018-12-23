@@ -4,7 +4,6 @@ import logic.brick.GlassBrick;
 import logic.brick.MetalBrick;
 import logic.brick.WoodenBrick;
 import visitor.ChangeLevelVisitor;
-import visitor.UpdateGamePointsVisitor;
 import visitor.Visitor;
 
 import java.util.*;

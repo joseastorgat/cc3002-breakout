@@ -1,16 +1,12 @@
 package facade;
 
 import controller.Game;
-import gui.GUI;
 import logic.bonus.Bonus;
-import logic.bonus.ExtraBallBonus;
-import logic.bonus.ExtraPointsBonus;
 import logic.brick.Brick;
 import logic.level.Level;
 import logic.level.PlayableLevel;
 
 import java.util.List;
-import java.util.Observable;
 import java.util.Observer;
 
 /**
@@ -195,24 +191,50 @@ public class HomeworkTwoFacade {
         return game.winner();
     }
 
+    /**
+     * Get the number of extraBalls in the game
+     * @return extraBalls in game
+     */
     public int getExtraBalls(){ return game.getExtraBalls();}
 
+    /**
+     * Add Observer to Game
+     * @param o Observer to be added to game
+     */
     public void addGameObserver(Observer o) {
         game.addObserver(o);
     }
 
+    /**
+     * Set the ExtraPoint Bonus of the Game
+     * @param extraPointsBonus to be set in Game
+     */
     public void setExtraPointsBonus(Bonus extraPointsBonus) {
         game.setExtraPointsBonus(extraPointsBonus);
     }
 
+
+    /**
+     * Set the ExtraBallBonus of the Game
+     * @param extraBallBonus to be set in Game
+     */
     public void setExtraBallBonus(Bonus extraBallBonus) {
         game.setExtraBallBonus(extraBallBonus);
     }
 
+
+    /**
+     * Get the ExtraBallBonus of the Game
+     * @return current ExtraBallBonus of the Game
+     */
     public Bonus getExtraBallBonus() {
         return game.getExtraBallBonus();
     }
 
+    /**
+     * Get the ExtraPointsBonus of the Game
+     * @return current ExtraPoints  Bonus of the Game
+     */
     public Bonus getExtraPointsBonus() {
         return game.getExtraPointsBonus();
     }

@@ -1,7 +1,5 @@
 package logic.brick;
 
-import visitor.UpdateGamePointsVisitor;
-import visitor.Visitor;
 
 /**
  * WoodenBrick class is a {@link Brick}

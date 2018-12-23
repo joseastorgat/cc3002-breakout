@@ -5,8 +5,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import logic.bonus.Bonus;
-import logic.bonus.ExtraBallBonus;
-import logic.bonus.ExtraPointsBonus;
 import logic.bonus.NullBonus;
 import logic.level.NullLevel;
 import logic.level.Level;

@@ -1,6 +1,5 @@
 package logic.brick;
 
-import visitor.Visitor;
 
 import java.util.Observer;
 

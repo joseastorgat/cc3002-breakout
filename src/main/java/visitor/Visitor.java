@@ -1,10 +1,6 @@
 package visitor;
 
-import controller.Game;
-import logic.brick.GlassBrick;
-import logic.brick.MetalBrick;
-import logic.brick.WoodenBrick;
-import logic.level.NullLevel;
+import controller.Game;q
 import logic.level.PlayableLevel;
 
 
