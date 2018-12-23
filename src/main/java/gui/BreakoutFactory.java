@@ -37,7 +37,8 @@ public final class BreakoutFactory {
         physics.setFixtureDef(
                 new FixtureDef()
                         .restitution(0f)
-                        .density(100000f));
+                        .density(10000f)
+                        .friction(10f));
 
         return Entities.builder()
                 .at(x, y)
@@ -73,7 +74,7 @@ public final class BreakoutFactory {
                 new FixtureDef()
                     .restitution(1f)
                     .density(0f)
-                    .friction(0.2f));
+                    .friction(0.01f));
 
         return Entities.builder()
                 .at(x, y)
@@ -120,6 +121,11 @@ public final class BreakoutFactory {
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.STATIC);
 
+        physics.setFixtureDef(
+                new FixtureDef()
+                        .restitution(0f)
+                        .density(0f)
+                        .friction(0f));
         String sound;
         String texture;
         if (brick.isGlassBrick()){
@@ -153,13 +159,13 @@ public final class BreakoutFactory {
      * @param img String with the name of the texture of the bonus
      * @return Bonus Entity
      */
-     static Entity newBonus(double x, double y, Bonus bonus, String img) {
+     static Entity newBonus(double x, double y, Bonus bonus, String img, String sound) {
             return Entities.builder()
                     .at(x, y)
                     .type(BreakoutGameType.BONUS)
                     .bbox(new HitBox("Bonus", BoundingShape.circle(50)))
                     .viewFromTextureWithBBox(img)
-                    .with(new CollidableComponent(true), new BonusControl(bonus))
+                    .with(new CollidableComponent(true), new BonusControl(bonus,sound))
                     .build();
     }
 
@@ -172,7 +178,7 @@ public final class BreakoutFactory {
      */
 
     static Entity newBallBonus(double x, double y, Bonus bonus){
-            return newBonus(x, y, bonus, "watermelon.png");
+            return newBonus(x, y, bonus, "watermelon.png", "powerup2.wav");
 
         }
     /**
@@ -183,7 +189,7 @@ public final class BreakoutFactory {
      * @return Bonus Entity
      */
     static Entity newPointsBonus(double x, double y, Bonus bonus){
-        return newBonus(x, y, bonus, "orange.png");
+        return newBonus(x, y, bonus, "orange.png","powerup1.wav");
 
     }
 

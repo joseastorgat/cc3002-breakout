@@ -34,16 +34,26 @@ public class BallControl extends Component {
         }
         double velx = physics.getVelocityX();
         double vely = physics.getVelocityY();
-        if(vely<10 && vely>0){
-            vely = 120;
-        }
-        else if(vely>-10 && vely<0){
-            vely = -120;
-        }
         double vel = Math.sqrt(velx*velx+vely*vely);
         if(vel>0){
             double factor = velocity/vel;
             entity.getComponent(PhysicsComponent.class).setLinearVelocity(velx*factor, vely*factor);
         }
+    }
+
+    /**
+     * Method to unStuck the ball when in stuck horizontally
+     */
+    public void unStuck(){
+        double vely = physics.getVelocityY();
+        if(ballInGame && (vely<3 && vely>-3)){
+            double ang;
+            if(physics.getVelocityX()<0)
+                ang = 2.9;
+            else
+                ang =0.2 ;
+            entity.getComponent(PhysicsComponent.class).setLinearVelocity(velocity*Math.cos(ang), -velocity*Math.sin(ang));
+        }
+
     }
 }

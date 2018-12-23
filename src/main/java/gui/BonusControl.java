@@ -1,5 +1,6 @@
 package gui;
 
+import com.almasb.fxgl.app.FXGL;
 import logic.bonus.Bonus;
 
 
@@ -14,13 +15,15 @@ import com.almasb.fxgl.entity.component.Component;
  */
 public class BonusControl extends Component {
     private Bonus bonus;
+    private String sound;
 
     /**
      * BonusControl Constructor
      * @param b {@link Bonus} to represent
      */
-    public BonusControl(Bonus b){
+    public BonusControl(Bonus b, String s){
         bonus = b;
+        sound = s;
     }
 
     /**
@@ -28,6 +31,7 @@ public class BonusControl extends Component {
      */
     public void trigger(){
         bonus.triggerBonus();
+        FXGL.getAudioPlayer().playSound(sound);
     }
 
     @Override
