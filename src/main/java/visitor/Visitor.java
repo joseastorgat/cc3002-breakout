@@ -1,6 +1,6 @@
 package visitor;
 
-import controller.Game;q
+import controller.Game;
 import logic.level.PlayableLevel;
 
 
